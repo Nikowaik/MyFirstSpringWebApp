@@ -7,10 +7,18 @@
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+		$(document).ready(function() {
+			$("#addTeamBtn").click(function() {
+				$("#addTeamForm").show();
+			});
+		});
+	</script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Football Site</a>
+    <a class="navbar-brand" href="index.html">Football Site</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -35,43 +43,27 @@
         </ul>
     </div>
 </nav>
+<h1>Select a Team:</h1>
+<select name="team">
+    <option value="team1">Team 1</option>
+    <option value="team2">Team 2</option>
+    <option value="team3">Team 3</option>
+</select>
 
+<button id="addTeamBtn">Add Team</button>
 
-<div class="container my-5">
-    <h1 class="text-center">Today's Matches</h1>
-    <div class="d-flex justify-content-between align-items-center my-4">
-        <h5 class="m-0">April 25, 2023</h5>
-        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#calendarModal">
-            Calendar
-        </button>
-    </div>
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>Time</th>
-            <th>Date</th>
-            <th>Home Team</th>
-            <th>Away Team</th>
-            <th>Score</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>12:00</td>
-            <td>April 25, 2023</td>
-            <td>Real Madrid</td>
-            <td>Barcelona</td>
-            <td>3 - 1</td>
-        </tr>
-        <tr>
-            <td>15:00</td>
-            <td>April 25, 2023</td>
-            <td>Manchester United</td>
-            <td>Liverpool</td>
-            <td>1 - 1</td>
-        </tr>
-        </tbody>
-    </table>
+<div id="addTeamForm" style="display:none">
+    <form>
+        <label for="name">Team Name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="league">League:</label><br>
+        <input type="text" id="league" name="league"><br><br>
+        <input type="submit" value="Submit">
+    </form>
 </div>
 </body>
+
+
 </html>
+
+

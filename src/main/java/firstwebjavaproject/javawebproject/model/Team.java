@@ -33,6 +33,8 @@ public class Team {
     private Set<Player> players = new HashSet<>();
 
 
+    public Team() {
+    }
 
     public Team(String name, League league, Set<Player> players) {
         super();

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New League</title>
+</head>
+<body>
+<h1>New League</h1>
+<form th:action="@{/leagues}" th:object="${league}" method="post">
+    <label for="name">League Name:</label>
+    <input type="text" id="name" name="name" required="required" /><br />
+
+    <label for="country">Country:</label>
+    <select id="country" name="country.id">
+        <option value="">-- Select a country --</option>
+        <option th:each="country : ${countries}"
+                th:value="${country.id}"
+                th:text="${country.name}">
+        </option>
+    </select><br />
+
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>

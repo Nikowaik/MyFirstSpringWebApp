@@ -30,6 +30,6 @@ public class CountryController {
     @PostMapping("/saveCountry")
     public String saveCountry(@ModelAttribute("country") Country country){
         countryService.saveCountry(country);
-        return "redirect:/countries";
+        return "redirect:/countries.html";
     }
 }
