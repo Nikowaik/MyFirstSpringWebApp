@@ -21,8 +21,8 @@ public class CountryController {
     }
 
     @GetMapping("/showNewCountryForm")
-            public String showNewCountryForm(Model model) {
-        Country country = new Country();
+        public String showNewCountryForm(Model model) {
+            Country country = new Country();
         model.addAttribute("country",country);
         return "new_country";
     }

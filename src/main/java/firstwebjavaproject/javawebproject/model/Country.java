@@ -12,7 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Country")
+@Table(name = "country")
 public class Country {
 
     @Id
@@ -24,7 +24,6 @@ public class Country {
 
     @OneToMany(mappedBy = "nationality")
     private Set<Player> players = new HashSet<>();
-
 
 
     public Country() {

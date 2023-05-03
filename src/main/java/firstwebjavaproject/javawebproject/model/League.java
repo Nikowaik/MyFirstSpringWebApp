@@ -16,9 +16,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "League")
+@Table(name = "league")
 public class League {
-    private List<Country> countries;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +32,6 @@ public class League {
 
     @OneToMany(mappedBy = "league")
     private Set<Team> teams = new HashSet<>();
-
 
 
     public League() {
@@ -61,14 +59,6 @@ public class League {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Country> getCountries() {
-        return countries;
-    }
-
-    public void setCountries(List<Country> countries) {
-        this.countries = countries;
     }
 
     public Country getCountry() {
