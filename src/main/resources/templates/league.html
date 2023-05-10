@@ -14,6 +14,12 @@
         document.getElementById('test').show();
     };
 </script>
+<style>
+    a {
+  color: inherit;
+  text-decoration: none;
+}
+</style>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -59,7 +65,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="league : ${listLeagues}">
-                    <td th:text="${league.name}"></td>
+                    <td><a th:href="@{/league/{leagueId}/teams(leagueId=${league.id})}" th:text="${league.name}"></a></td>
                     <td th:text="${league.country.name}"></td>
                     <td>
                         <form th:action="@{'/deleteLeague/' + ${league.id}}" method="post">

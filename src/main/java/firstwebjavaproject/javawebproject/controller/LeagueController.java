@@ -2,6 +2,8 @@ package firstwebjavaproject.javawebproject.controller;
 
 import firstwebjavaproject.javawebproject.model.Country;
 import firstwebjavaproject.javawebproject.model.League;
+import firstwebjavaproject.javawebproject.model.Team;
+import firstwebjavaproject.javawebproject.repository.TeamRepository;
 import firstwebjavaproject.javawebproject.services.CountryService;
 import firstwebjavaproject.javawebproject.services.LeagueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -18,6 +22,8 @@ public class LeagueController {
     private CountryService countryService;
     @Autowired
     private LeagueService leagueService;
+    @Autowired
+    private TeamRepository teamRepository;
 
     @GetMapping("league.html")
     public String leagueView(Model model){
@@ -51,6 +57,17 @@ public class LeagueController {
         model.addAttribute("league", league);
         model.addAttribute("listCountries", listCountries);
         return "league";
+    }
+
+    @GetMapping("/league/{leagueId}/teams")
+    public ModelAndView viewLeagueTeams(@PathVariable Long leagueId) {
+        League league = leagueService.getLeagueById(leagueId);
+        List<Team> teams = teamRepository.findTeamsByLeagueId(leagueId);
+
+        ModelAndView mav = new ModelAndView("league-teams.html");
+        mav.addObject("league", league);
+        mav.addObject("teams", teams);
+        return mav;
     }
 
     @PostMapping("/updateLeague")

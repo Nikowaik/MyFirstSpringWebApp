@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Team</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Football Site</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="matches.html">Matches</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="standings.html">Standings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="teams.html">Teams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="league.html">Leagues</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="countries.html">Countries</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="news.html">News</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<h1>New Team</h1>
+
+<form th:action="@{/saveTeam}" th:object="${team}" method="post">
+    <label for="name">Team Name:</label>
+    <input type="text" id="name" name="name" required="required" /><br />
+
+    <label for="league">League:</label>
+    <select id="league" name="league.id">
+        <option value="">-- Select a league --</option>
+        <option th:each="league : ${leagues}"
+                th:value="${league.id}"
+                th:text="${league.name}">
+        </option>
+    </select><br />
+
+    <button type="submit">Save</button>
+</form>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Team Name</th>
+        <th>League Name</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="team : ${teams}">
+        <td th:text="${team.name}"></td>
+        <td th:text="${team.league.name}"></td>
+        <td>
+            <form th:action="@{/deleteTeam/{id}(id=${team.id})}" method="post">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

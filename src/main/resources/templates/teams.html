@@ -1,24 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Football Site</title>
+    <title>Teams</title>
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-		$(document).ready(function() {
-			$("#addTeamBtn").click(function() {
-				$("#addTeamForm").show();
-			});
-		});
-	</script>
+    <style>
+        /* Background styles */
+        body {
+            background-color: #f2f2f2;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 30px;
+        }
+        /* Table styles */
+        table {
+            margin-top: 30px;
+        }
+        th, td {
+            text-align: center;
+        }
+        th {
+            background-color: #2d3e50;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        /* Form styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], select {
+            height: 40px;
+            font-size: 16px;
+        }
+        /* Button styles */
+        button {
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #2d3e50;
+            color: #fff;
+        }
+        /* Form display styles */
+        #team-form {
+            margin-top: 30px;
+        }
+        #team-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        #team-form button {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="index.html">Football Site</a>
+    <a class="navbar-brand" href="#">Football Site</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -35,6 +91,9 @@
                 <a class="nav-link" href="teams.html">Teams</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="league.html">Leagues</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="countries.html">Countries</a>
             </li>
             <li class="nav-item">
@@ -43,27 +102,55 @@
         </ul>
     </div>
 </nav>
-<h1>Select a Team:</h1>
-<select name="team">
-    <option value="team1">Team 1</option>
-    <option value="team2">Team 2</option>
-    <option value="team3">Team 3</option>
-</select>
+<div class="container">
+    <h1>Team List</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Team Name</th>
+            <th>League Name</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="team : ${teams}">
+            <td th:text="${team.name}"></td>
+            <td th:text="${team.league.name}"></td>
+            <td>
+                <form th:action="@{'/deleteTeam/' + ${team.id}}" method="POST">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-<button id="addTeamBtn">Add Team</button>
+    <button id="add-team-button" class="btn btn-primary">Add new team</button>
 
-<div id="addTeamForm" style="display:none">
-    <form>
-        <label for="name">Team Name:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <label for="league">League:</label><br>
-        <input type="text" id="league" name="league"><br><br>
-        <input type="submit" value="Submit">
-    </form>
+    <div id="team-form" style="display: none;">
+        <form id="new-team-form" th:action="@{/teams}" method="POST" th:object="${newTeam}">
+            <div class="form-group">
+                <label for="teamName">Team Name:</label>
+                <input type="text" class="form-control" id="teamName" name="name" th:field="*{name}" required>
+            </div>
+            <div class="form-group">
+                <label for="league">League:</label>
+                <select class="form-control" id="league" name="league.id" required>
+                    <option value="">Select a league</option>
+                    <option th:each="league : ${leagues}" th:value="${league.id}" th:text="${league.name}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
 </div>
+<script>
+  $(document).ready(function() {
+    $("#add-team-button").click(function() {
+      $("#team-form").show();
+    });
+  });
+</script>
 </body>
-
-
 </html>
-
-

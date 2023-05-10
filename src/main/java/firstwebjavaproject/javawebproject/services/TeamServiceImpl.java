@@ -16,4 +16,14 @@ public class TeamServiceImpl implements TeamService{
     public List<Team> getAllTeams() {
         return teamRepository.findAll();
     }
+
+    @Override
+    public Team saveTeam(Team team) {
+        return teamRepository.save(team);
+    }
+
+    @Override
+    public void deleteTeamById(Long id) {
+        teamRepository.deleteById(id);
+    }
 }
