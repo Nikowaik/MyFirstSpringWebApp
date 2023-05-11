@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Football Site - Matches</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h1 {
+            color: #343a40;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .table {
+            background-color: #fff;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .btn-add-match {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+        }
+        .btn-add-match:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Football Site</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="matches.html">Matches</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="standings.html">Standings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="teams.html">Teams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="league.html">Leagues</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="countries.html">Countries</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="news.html">News</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Matches</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>League Name</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Iterate over leagues and populate table rows -->
+                <tr th:each="league : ${leagues}">
+                    <td th:text="${league.name}"></td>
+                    <td>
+                        <!-- Add Match button -->
+                        <a th:href="@{/addMatch/{leagueId}(leagueId=${league.id})}" class="btn btn-primary">Add Match</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // JavaScript code to handle button click
+    document.getElementById("add-match-button").addEventListener("click", function() {
+        // Perform action when the button is clicked
+        // For example, navigate to a form or page for adding matches
+        window.location.href = "/add-match";
+    });
+</script>
+</body>
+</html>

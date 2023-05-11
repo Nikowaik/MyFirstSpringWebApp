@@ -87,6 +87,10 @@ public class Match {
         return homeTeamScore;
     }
 
+    public Integer getLeagueId(){
+        return this.league.getId();
+    }
+
     public void setHomeTeamScore(Integer homeTeamScore) {
         this.homeTeamScore = homeTeamScore;
     }

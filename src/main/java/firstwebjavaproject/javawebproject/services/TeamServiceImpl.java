@@ -26,4 +26,24 @@ public class TeamServiceImpl implements TeamService{
     public void deleteTeamById(Long id) {
         teamRepository.deleteById(id);
     }
+
+    @Override
+    public List<Team> getTeamsById(Long leagueId) {
+        return teamRepository.findTeamsByLeagueId(leagueId);
+    }
+
+    @Override
+    public List<Team> getHomeTeamsById(Long leagueId) {
+        return teamRepository.findTeamsByLeagueId(leagueId);
+    }
+
+    @Override
+    public List<Team> getAwayTeamsById(Long leagueId) {
+        return teamRepository.findTeamsByLeagueId(leagueId);
+    }
+
+    @Override
+    public Team getTeamById(Long id) {
+        return teamRepository.findById(id).orElse(null);
+    }
 }
