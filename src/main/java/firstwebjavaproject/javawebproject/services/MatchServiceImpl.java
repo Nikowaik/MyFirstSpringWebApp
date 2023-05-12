@@ -6,6 +6,7 @@ import firstwebjavaproject.javawebproject.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,5 +25,15 @@ private MatchRepository matchRepository;
     @Override
     public Match saveMatch(Match match) {
         return matchRepository.save(match);
+    }
+
+    @Override
+    public List<Match> getAllMatches() {
+        return matchRepository.findAll();
+    }
+
+    @Override
+    public List<Match> getMatchesByDate(LocalDate date) {
+        return matchRepository.findByDate(date);
     }
 }

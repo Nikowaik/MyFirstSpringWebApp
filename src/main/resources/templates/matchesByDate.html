@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Matches By Date</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .match {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .team {
+            flex-basis: 40%;
+        }
+        .score {
+            flex-basis: 20%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Matches By Date</h1>
+    <form th:action="@{/matchesByDate}" method="get" id="dateForm">
+        <div class="form-group">
+            <label for="date">Select Date:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="button" id="decrementDate">-</button>
+                </div>
+                <input type="date" id="date" name="date" class="form-control" th:value="${date}" required="required" onChange="submitForm()" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="incrementDate">+</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <hr>
+
+    <div th:each="entry : ${leagueMatchesMap}">
+        <h2 th:text="${entry.key.name}"></h2>
+        <div th:each="match : ${entry.value}" class="match">
+            <div class="team" th:text="${match.homeTeam.name}"></div>
+            <div class="score" th:text="|${match.homeTeamScore} - ${match.awayTeamScore}|"></div>
+            <div class="team" th:text="${match.awayTeam.name}"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Bootstrap and jQuery JavaScript -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function submitForm() {
+        document.getElementById("dateForm").submit();
+    }
+</script>
+<script type="text/javascript">
+    const dateInput = document.getElementById("date");
+    const decrementDateButton = document.getElementById("decrementDate");
+    const incrementDateButton = document.getElementById("incrementDate");
+
+    decrementDateButton.addEventListener("click", function() {
+        changeDate(-1);
+    });
+
+    incrementDateButton.addEventListener("click", function() {
+        changeDate(1);
+    });
+
+    function changeDate(days) {
+        let currentDate = new Date(dateInput.value);
+        currentDate.setDate(currentDate.getDate() + days);
+        dateInput.value = currentDate.toISOString().split('T')[0]; // Change the date input value to the new date
+        submitForm();
+    }
+
+    function submitForm() {
+        document.getElementById("dateForm").submit();
+    }
+</script>
+
+</body>
+</html>

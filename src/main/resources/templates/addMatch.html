@@ -6,18 +6,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 </head>
 <body>
 <div class="container">
     <h1>Add Match</h1>
-    <form th:action="@{/saveMatch/{leagueId}(leagueId=${leagueId})}" th:object="${match}" method="post">
+    <form id="formMatch" th:action="@{/saveMatch/{leagueId}(leagueId=${leagueId})}" th:object="${match}" method="post">
         <input type="hidden" name="leagueId" th:value="${leagueId}" />
-        <input type="hidden" id="homeTeamId" name="homeTeamId" />
-        <input type="hidden" id="awayTeamId" name="awayTeamId" />
 
         <div class="form-group">
             <label for="homeTeam">Home Team:</label>
-            <select id="homeTeam" name="match.homeTeam.id" class="form-control">
+            <select id="homeTeam" name="homeTeam.id" class="form-control">
                 <!-- Iterate over home teams and populate options -->
                 <option th:each="team : ${homeTeams}" th:value="${team.id}" th:text="${team.name}"></option>
             </select>
@@ -25,24 +26,40 @@
 
         <div class="form-group">
             <label for="awayTeam">Away Team:</label>
-            <select id="awayTeam" name="match.awayTeam.id" class="form-control">
+            <select id="awayTeam" name="awayTeam.id" class="form-control">
                 <!-- Iterate over away teams and populate options -->
                 <option th:each="team : ${awayTeams}" th:value="${team.id}" th:text="${team.name}"></option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="homeScore">Home Score:</label>
-            <input type="number" id="homeScore" name="homeScore" class="form-control" required="required" />
+            <label for="homeTeamScore">Home Score:</label>
+            <input type="number" id="homeTeamScore" name="homeTeamScore" class="form-control" required="required" />
         </div>
 
         <div class="form-group">
-            <label for="awayScore">Away Score:</label>
-            <input type="number" id="awayScore" name="awayScore" class="form-control" required="required" />
+            <label for="awayTeamScore">Away Score:</label>
+            <input type="number" id="awayTeamScore" name="awayTeamScore" class="form-control" required="required" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Save Match</button>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" class="form-control" required="required" />
+        </div>
+
+        <button id="submit" type="submit" class="btn btn-primary">Save Match</button>
     </form>
+
 </div>
+<script>
+    document.querySelector("#formMatch").addEventListener("submit", function(event) {
+        var homeTeam = document.querySelector("#homeTeam").value;
+        var awayTeam = document.querySelector("#awayTeam").value;
+        if (homeTeam === awayTeam) {
+            event.preventDefault();  // Prevents form submission
+            alert("Home team and away team are equal. Please make sure they are not the same!");  // Shows an error message
+        }
+    });
+</script>
 </body>
 </html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/matchesByDate" method="get">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required="required">
+    <input type="submit" value="Submit">
+</form>
+
+<h1>All Matches</h1>
+<div th:each="match : ${matches}">
+    <!-- Display match details -->
+    <p th:text="${match.homeTeam.name} + ' vs ' + ${match.awayTeam.name} + ' ' + ${match.homeTeamScore} + ':' + ${match.awayTeamScore}"></p>
+</div>
+
+</body>
+</html>

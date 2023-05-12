@@ -119,6 +119,13 @@ public class Match {
         this.league = league;
     }
 
+    public Long getHomeTeamId(){
+       return this.homeTeam.getId();
+    }
+
+    public Long getAwayTeamId(){
+        return this.awayTeam.getId();
+    }
 
     // getters and setters
 }
