@@ -1,8 +1,10 @@
 package firstwebjavaproject.javawebproject.controller;
 
 import firstwebjavaproject.javawebproject.model.League;
+import firstwebjavaproject.javawebproject.model.Match;
 import firstwebjavaproject.javawebproject.model.Team;
 import firstwebjavaproject.javawebproject.services.LeagueService;
+import firstwebjavaproject.javawebproject.services.MatchService;
 import firstwebjavaproject.javawebproject.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -23,6 +25,8 @@ public class TeamController {
     private TeamService teamService;
     @Autowired
     private LeagueService leagueService;
+    @Autowired
+    private MatchService matchService;
 
     @GetMapping("teams.html")
    public String showAllTeam(Model model){
@@ -47,14 +51,19 @@ public class TeamController {
         model.addAttribute("leagues", leagues);
         return "new-team";
     }
-//    @PostMapping("/teams")
-//    public String addTeam(@ModelAttribute("team") @Validated Team team, BindingResult result) {
-//        if (result.hasErrors()) {
-//            return "new-team";
-//        }
-//        teamService.saveTeam(team);
-//        return "redirect:/teams";
-//    }
+    //navigate to teams.html
+    @GetMapping("/team/{id}")
+    public String showTeams(@PathVariable("id") Long teamId, Model model){
+        Team team = teamService.getTeamById(teamId);
+        List<Match> lastFiveMatches = matchService.getLastFiveMatches(teamId);
+        List<Match> allPreviousMatches = matchService.getAllPreviousMatches(teamId);
+
+        model.addAttribute("team", team);
+        model.addAttribute("lastFiveMatches", lastFiveMatches);
+        model.addAttribute("allPreviousMatches", allPreviousMatches);
+
+        return "team";
+    }
 
     @PostMapping("/teams/save")
     public String saveTeam(@Validated @ModelAttribute("team") Team team, BindingResult bindingResult, Model model){

@@ -4,6 +4,9 @@ import firstwebjavaproject.javawebproject.model.Match;
 import firstwebjavaproject.javawebproject.model.Team;
 import firstwebjavaproject.javawebproject.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,5 +38,22 @@ private MatchRepository matchRepository;
     @Override
     public List<Match> getMatchesByDate(LocalDate date) {
         return matchRepository.findByDate(date);
+    }
+
+    @Override
+    public void deleteMatch(Long id) {
+         this.matchRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Match> getLastFiveMatches(Long teamId) {
+        Pageable pageable = PageRequest.of(0,5);
+
+        return matchRepository.findTop5ByHomeTeamIdOrAwayTeamIdOrderByDateDesc(teamId, pageable);
+    }
+
+    @Override
+    public List<Match> getAllPreviousMatches(Long teamId) {
+        return matchRepository.findByHomeTeamIdOrAwayTeamIdOrderByDateDesc(teamId);
     }
 }

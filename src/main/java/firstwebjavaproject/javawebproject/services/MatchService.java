@@ -11,4 +11,7 @@ public interface MatchService {
     Match saveMatch(Match match);
     List<Match> getAllMatches();
     List<Match> getMatchesByDate(LocalDate date);
+    void deleteMatch(Long id);
+    List<Match> getLastFiveMatches(Long teamId);
+    List<Match> getAllPreviousMatches(Long teamId);
 }

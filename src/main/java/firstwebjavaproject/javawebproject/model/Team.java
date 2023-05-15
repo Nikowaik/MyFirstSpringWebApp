@@ -53,20 +53,18 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private Set<Player> players = new HashSet<>();
 
-
     public Team() {
     }
 
-    public Team(String name,Integer points,Integer wins, Integer draws,Integer losses,
-                Integer goalsFor, Integer goalsAgainst,Integer goalDifference,League league, Set<Player> players) {
-        super();
+    public Team(String name, Integer points, Integer wins, Integer draws, Integer losses,
+                Integer goalsFor, Integer goalsAgainst, Integer goalDifference, League league, Set<Player> players) {
         this.name = name;
-        this.wins=wins;
-        this.draws=draws;
-        this.losses=losses;
-        this.goalsFor=goalsFor;
-        this.goalsAgainst=goalsAgainst;
-        this.goalDifference=goalDifference;
+        this.wins = wins;
+        this.draws = draws;
+        this.losses = losses;
+        this.goalsFor = goalsFor;
+        this.goalsAgainst = goalsAgainst;
+        this.goalDifference = goalDifference;
         this.league = league;
         this.players = players;
     }
@@ -103,28 +101,61 @@ public class Team {
         this.players = players;
     }
 
-    public Integer getWins(){
-       return wins;
+    public Integer getWins() {
+        return wins;
     }
 
-    public Integer getDraws(){
+    public Integer getDraws() {
         return draws;
     }
 
-    public Integer getLosses(){
+    public Integer getLosses() {
         return losses;
     }
 
-    public Integer getGoalsFor(){
+    public Integer getGoalsFor() {
         return goalsFor;
     }
 
-    public Integer getGoalsAgainst(){
+    public Integer getGoalsAgainst() {
         return goalsAgainst;
     }
 
-    public Integer getGoalDifference(){
+    public Integer getGoalDifference() {
         return goalDifference;
+    }
+
+    public void setLosses(Integer losses) {
+        this.losses = losses;
+    }
+
+    public void setGoalsFor(Integer goalsFor) {
+        this.goalsFor = goalsFor;
+    }
+
+    public void setGoalsAgainst(Integer goalsAgainst) {
+        this.goalsAgainst = goalsAgainst;
+    }
+
+    public void setGoalDifference(Integer goalDifference) {
+        this.goalDifference = goalDifference;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setDraws(Integer draws) {
+        this.draws = draws;
+    }
+
+    public void setWins(Integer wins) {
+        this.wins = wins;
     }
 }
 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${team.name}"></title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<h1 th:text="${team.name}"></h1>
+<div class="btn-group" role="group">
+    <button type="button" class="btn btn-secondary" onclick="showSection('summary')">Summary</button>
+    <button type="button" class="btn btn-secondary" onclick="showSection('results')">Results</button>
+    <button type="button" class="btn btn-secondary" onclick="showSection('fixtures')">Fixtures</button>
+    <button type="button" class="btn btn-secondary" onclick="showSection('standings')">Standings</button>
+</div>
+
+<div id="summary" class="team-section">
+    <h2>Last Five Matches</h2>
+    <div th:each="match : ${lastFiveMatches}">
+        <p th:text="${match.homeTeam.name} + ' vs ' + ${match.awayTeam.name} + ' on ' + ${#temporals.format(match.date, 'yyyy-MM-dd')}"></p>
+    </div>
+</div>
+
+<div id="results" class="team-section" style="display: none;">
+    <h2>All Previous Matches</h2>
+    <div th:each="match : ${allPreviousMatches}">
+        <p th:text="${match.homeTeam.name} + ' vs ' + ${match.awayTeam.name} + ' on ' + ${#temporals.format(match.date, 'yyyy-MM-dd')}"></p>
+    </div>
+</div>
+
+<div id="fixtures" class="team-section" style="display: none;">
+    <!-- Add fixtures information here -->
+</div>
+
+<div id="standings" class="team-section" style="display: none;">
+    <!-- Add standings information here -->
+</div>
+
+<!-- Add Bootstrap and jQuery JavaScript -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+        function showSection(sectionId) {
+            // Hide all sections
+            var sections = document.getElementsByClassName('team-section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].style.display = 'none';
+            }
+            // Show the selected section
+            document.getElementById(sectionId).style.display = 'block';
+        }
+</script>
+</body>
+</html>

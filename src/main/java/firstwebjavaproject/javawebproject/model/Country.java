@@ -15,11 +15,12 @@ import jakarta.persistence.Table;
 @Table(name = "country")
 public class Country {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @OneToMany(mappedBy = "nationality")

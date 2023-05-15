@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TeamServiceImpl implements TeamService{
+public class TeamServiceImpl implements TeamService {
     @Autowired
     private TeamRepository teamRepository;
 
@@ -45,5 +45,62 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public Team getTeamById(Long id) {
         return teamRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void updateStatus(Team homeTeam, Team awayTeam, int homeTeamScore, int awayTeamScore) {
+
+        validateTeamValues(homeTeam);
+        validateTeamValues(awayTeam);
+
+        if (homeTeamScore > awayTeamScore) {
+            homeTeam.setWins(homeTeam.getWins() + 1);
+            awayTeam.setLosses(awayTeam.getLosses() + 1);
+            homeTeam.setPoints(homeTeam.getPoints() + 3);
+        } else if (homeTeamScore < awayTeamScore) {
+            homeTeam.setLosses(homeTeam.getLosses() + 1);
+            awayTeam.setWins(awayTeam.getWins() + 1);
+            awayTeam.setPoints(awayTeam.getPoints() + 3);
+        } else {
+            homeTeam.setDraws(homeTeam.getDraws() + 1);
+            awayTeam.setDraws(awayTeam.getDraws() + 1);
+
+            homeTeam.setPoints(homeTeam.getPoints() + 1);
+            awayTeam.setPoints(awayTeam.getPoints() + 1);
+        }
+
+        homeTeam.setGoalsFor(homeTeam.getGoalsFor() + homeTeamScore);
+        homeTeam.setGoalsAgainst(homeTeam.getGoalsAgainst() + awayTeamScore);
+
+        awayTeam.setGoalsFor(awayTeam.getGoalsFor() + awayTeamScore);
+        awayTeam.setGoalsAgainst(awayTeam.getGoalsAgainst() + homeTeamScore);
+
+        saveTeam(homeTeam);
+        saveTeam(awayTeam);
+    }
+
+    private void validateTeamValues(Team team) {
+        if (team.getWins() == null) {
+            team.setWins(0);
+        }
+        if (team.getLosses() == null) {
+            team.setLosses(0);
+        }
+        if (team.getDraws() == null) {
+            team.setDraws(0);
+        }
+        if (team.getGoalsFor() == null) {
+            team.setGoalsFor(0);
+        }
+        if (team.getGoalsAgainst() == null) {
+            team.setGoalsAgainst(0);
+        }
+        if (team.getPoints() == null) {
+            team.setPoints(0);
+        }
+        if (team.getGoalDifference() == null) {
+            team.setGoalDifference(0);
+        }
+
     }
 }

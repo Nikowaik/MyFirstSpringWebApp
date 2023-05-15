@@ -63,6 +63,15 @@ public class MatchController {
         match.setLeague(league);
         matchService.saveMatch(match);
 
+
+        Team homeTeam = teamService.getTeamById(match.getHomeTeam().getId());
+        Team awayTeam = teamService.getTeamById(match.getAwayTeam().getId());
+
+        int homeTeamGoals = match.getHomeTeamScore();
+        int awayTeamGoals = match.getAwayTeamScore();
+
+        teamService.updateStatus(homeTeam, awayTeam, homeTeamGoals, awayTeamGoals);
+
         LocalDate today = LocalDate.now();
         String redirectUrl = "redirect:/matchesByDate?date=" + today.toString();
         return redirectUrl;
@@ -100,5 +109,12 @@ public class MatchController {
 
         return "matchesByDate";
     }
+
+    @PostMapping("/deleteMatch/{id}/{date}")
+    public String deleteMatch(@PathVariable("id") Long id, @PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date){
+        matchService.deleteMatch(id);
+        return "redirect:/matchesByDate?date=" + date;
+    }
+
 }
 
