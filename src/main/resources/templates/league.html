@@ -70,9 +70,10 @@
                     <td>
                         <form th:action="@{'/deleteLeague/' + ${league.id}}" method="post">
                             <input type="hidden" name="_method" value="delete" />
-                            <button type="submit" class="btn btn-danger btn-sm">
+                            <button type="button" class="btn btn-danger btn-sm delete-btn" th:attr="data-id=${league.id}">
                                 <i class="fas fa-trash"></i>
                             </button>
+
                         </form>
                     </td>
                     <td>
@@ -104,6 +105,37 @@
         });
     });
 </script>
+
+                    <script>
+                      $(document).off('click', '.delete-btn').on('click', '.delete-btn', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var leagueId = $(this).data('id');
+
+    $.ajax({
+        url: '/deleteLeague/' + leagueId,
+        type: 'DELETE',
+        success: function(result) {
+            // If the delete was successful, remove the league from the table (or refresh the page)
+            location.reload();
+
+            // Add a success message here to inform the user
+            alert('Success: The league has been deleted successfully.');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // If the delete was not successful, show an error message
+            if (jqXHR.status == 400 && jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert('Error: ' + jqXHR.responseJSON.message);
+            } else {
+                alert('Error: The league could not be deleted.');
+            }
+        }
+    });
+});
+
+                    </script>
+
+
                 </tr>
                 </tbody>
             </table>

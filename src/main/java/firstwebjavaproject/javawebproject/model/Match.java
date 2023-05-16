@@ -3,15 +3,7 @@ package firstwebjavaproject.javawebproject.model;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Match")
@@ -42,21 +34,26 @@ public class Match {
     @JoinColumn(name = "league_id")
     private League league;
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "match_state")
+    private MatchState matchState;
 
     public Match() {
         super();
     }
 
-    public Match(Team homeTeam, Team awayTeam, Integer homeTeamScore, Integer awayTeamScore, LocalDate date,
-                 League league) {
+    public Match(Team homeTeam, Team awayTeam, LocalDate date, League league) {
         super();
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
-        this.homeTeamScore = homeTeamScore;
-        this.awayTeamScore = awayTeamScore;
         this.date = date;
         this.league = league;
+    }
+
+    public Match(Team homeTeam, Team awayTeam, Integer homeTeamScore, Integer awayTeamScore, LocalDate date, League league) {
+        this(homeTeam, awayTeam, date, league);
+        this.homeTeamScore = homeTeamScore;
+        this.awayTeamScore = awayTeamScore;
     }
 
     public Integer getId() {
@@ -119,6 +116,14 @@ public class Match {
         this.league = league;
     }
 
+    public MatchState getMatchState() {
+        return matchState;
+    }
+
+    public void setMatchState(MatchState matchState) {
+        this.matchState = matchState;
+    }
+
     public Long getHomeTeamId(){
        return this.homeTeam.getId();
     }
@@ -127,5 +132,8 @@ public class Match {
         return this.awayTeam.getId();
     }
 
-    // getters and setters
+    public enum MatchState {
+        Finished,
+        ToBePlayed
+    }
 }

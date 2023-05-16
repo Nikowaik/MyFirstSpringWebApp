@@ -13,11 +13,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class MatchServiceImpl implements MatchService{
-@Autowired
-private TeamService teamService;
-@Autowired
-private MatchRepository matchRepository;
+public class MatchServiceImpl implements MatchService {
+    @Autowired
+    private TeamService teamService;
+    @Autowired
+    private MatchRepository matchRepository;
 
 
     @Override
@@ -42,12 +42,12 @@ private MatchRepository matchRepository;
 
     @Override
     public void deleteMatch(Long id) {
-         this.matchRepository.deleteById(id);
+        this.matchRepository.deleteById(id);
     }
 
     @Override
     public List<Match> getLastFiveMatches(Long teamId) {
-        Pageable pageable = PageRequest.of(0,5);
+        Pageable pageable = PageRequest.of(0, 5);
 
         return matchRepository.findTop5ByHomeTeamIdOrAwayTeamIdOrderByDateDesc(teamId, pageable);
     }
@@ -55,5 +55,16 @@ private MatchRepository matchRepository;
     @Override
     public List<Match> getAllPreviousMatches(Long teamId) {
         return matchRepository.findByHomeTeamIdOrAwayTeamIdOrderByDateDesc(teamId);
+    }
+
+    @Override
+    public boolean checkIfBothTeamsScored(Match match) {
+        if (match.getHomeTeamScore() != null && match.getAwayTeamScore() != null) {
+            match.setMatchState(Match.MatchState.Finished);
+            return true;
+        } else {
+            match.setMatchState(Match.MatchState.ToBePlayed);
+            return false;
+        }
     }
 }

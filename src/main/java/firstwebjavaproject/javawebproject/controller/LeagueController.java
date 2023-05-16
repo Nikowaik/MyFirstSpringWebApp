@@ -1,5 +1,6 @@
 package firstwebjavaproject.javawebproject.controller;
 
+import firstwebjavaproject.javawebproject.exception.LeagueNotEmptyException;
 import firstwebjavaproject.javawebproject.model.Country;
 import firstwebjavaproject.javawebproject.model.League;
 import firstwebjavaproject.javawebproject.model.Team;
@@ -8,6 +9,8 @@ import firstwebjavaproject.javawebproject.services.CountryService;
 import firstwebjavaproject.javawebproject.services.LeagueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class LeagueController {
@@ -45,10 +49,14 @@ public class LeagueController {
         return "redirect:/league.html";
     }
 
-    @PostMapping("/deleteLeague/{id}")
-    public String deleteLeague(@PathVariable("id") Long id) {
-        leagueService.deleteLeagueById(id);
-        return "redirect:/league.html";
+    @DeleteMapping("/deleteLeague/{id}")
+    public ResponseEntity<?> deleteLeague(@PathVariable("id") Long id) {
+        try {
+            leagueService.deleteLeagueById(id);
+            return ResponseEntity.ok().build();
+        } catch (LeagueNotEmptyException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        }
     }
     @GetMapping("/editLeague/{id}")
     public String showEditLeagueForm(@PathVariable("id") Long id, Model model) {

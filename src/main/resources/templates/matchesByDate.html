@@ -60,7 +60,10 @@
             <div class="team">
                 <a th:href="@{'/team/' + ${match.homeTeam.id}}" th:text="${match.homeTeam.name}"></a>
             </div>
-            <div class="score" th:text="|${match.homeTeamScore} - ${match.awayTeamScore}|"></div>
+            <div class="score"
+                 th:text="|${match.homeTeamScore != null ? match.homeTeamScore : ''} - ${match.awayTeamScore != null ? match.awayTeamScore : ''}|">
+            </div>
+
             <!-- Add <a> tag for away team -->
             <div class="team">
                 <a th:href="@{'/team/' + ${match.awayTeam.id}}" th:text="${match.awayTeam.name}"></a>
@@ -84,8 +87,7 @@
 <script type="text/javascript">
     const dateInput = document.getElementById("date");
     const decrementDateButton = document.getElementById("decrementDate");
-    const incrementDateButton = document.getElementById("
-    incrementDate");
+    const incrementDateButton = document.getElementById("incrementDate");
 
     decrementDateButton.addEventListener("click", function() {
         changeDate(-1);

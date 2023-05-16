@@ -61,16 +61,19 @@ public class MatchController {
 
         League league = leagueService.getLeagueById(leagueId);
         match.setLeague(league);
+        boolean checkIfBothTeamsScored = matchService.checkIfBothTeamsScored(match);
+
         matchService.saveMatch(match);
 
+        if (checkIfBothTeamsScored) {
+            Team homeTeam = teamService.getTeamById(match.getHomeTeam().getId());
+            Team awayTeam = teamService.getTeamById(match.getAwayTeam().getId());
 
-        Team homeTeam = teamService.getTeamById(match.getHomeTeam().getId());
-        Team awayTeam = teamService.getTeamById(match.getAwayTeam().getId());
+            int homeTeamGoals = match.getHomeTeamScore();
+            int awayTeamGoals = match.getAwayTeamScore();
 
-        int homeTeamGoals = match.getHomeTeamScore();
-        int awayTeamGoals = match.getAwayTeamScore();
-
-        teamService.updateStatus(homeTeam, awayTeam, homeTeamGoals, awayTeamGoals);
+            teamService.updateStatus(homeTeam, awayTeam, homeTeamGoals, awayTeamGoals);
+        }
 
         LocalDate today = LocalDate.now();
         String redirectUrl = "redirect:/matchesByDate?date=" + today.toString();

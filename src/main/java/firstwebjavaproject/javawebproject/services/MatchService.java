@@ -14,4 +14,5 @@ public interface MatchService {
     void deleteMatch(Long id);
     List<Match> getLastFiveMatches(Long teamId);
     List<Match> getAllPreviousMatches(Long teamId);
+    boolean checkIfBothTeamsScored(Match match);
 }

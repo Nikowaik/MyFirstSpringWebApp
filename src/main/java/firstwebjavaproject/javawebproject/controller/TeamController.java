@@ -7,7 +7,6 @@ import firstwebjavaproject.javawebproject.services.LeagueService;
 import firstwebjavaproject.javawebproject.services.MatchService;
 import firstwebjavaproject.javawebproject.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
