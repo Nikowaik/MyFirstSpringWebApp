@@ -5,6 +5,7 @@ import firstwebjavaproject.javawebproject.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -53,6 +54,46 @@ public class TeamServiceImpl implements TeamService {
         validateTeamValues(homeTeam);
         validateTeamValues(awayTeam);
 
+        validateTeamPoints(homeTeam, awayTeam, homeTeamScore, awayTeamScore);
+
+        setGoalsScoredAndGoalsConcededForHomeAndAwayTeam(homeTeam, awayTeam, homeTeamScore, awayTeamScore);
+
+        setGoalDifferenceAfterMatch(awayTeam);
+        setGoalDifferenceAfterMatch(homeTeam);
+
+        setMatchesPlayedForBothTeams(homeTeam);
+        setMatchesPlayedForBothTeams(awayTeam);
+
+        saveTeam(homeTeam);
+        saveTeam(awayTeam);
+    }
+
+    @Override
+    public List<Team> getAllTeamsSortedByPoints(Long leagueId) {
+        List<Team> teams = teamRepository.findTeamsByLeagueId(leagueId);
+
+        teams.sort(Comparator
+                .comparing(Team::getPoints).reversed()
+                .thenComparing(Team::getGoalDifference).reversed()
+                .thenComparing(Team::getGoalsFor).reversed());
+
+        return teams;
+    }
+
+    private void setMatchesPlayedForBothTeams(Team team) {
+        team.setMatchesPlayed(team.getMatchesPlayed() + 1);
+
+    }
+
+    private void setGoalsScoredAndGoalsConcededForHomeAndAwayTeam(Team homeTeam, Team awayTeam, int homeTeamScore, int awayTeamScore) {
+        homeTeam.setGoalsFor(homeTeam.getGoalsFor() + homeTeamScore);
+        homeTeam.setGoalsAgainst(homeTeam.getGoalsAgainst() + awayTeamScore);
+
+        awayTeam.setGoalsFor(awayTeam.getGoalsFor() + awayTeamScore);
+        awayTeam.setGoalsAgainst(awayTeam.getGoalsAgainst() + homeTeamScore);
+    }
+
+    private void validateTeamPoints(Team homeTeam, Team awayTeam, int homeTeamScore, int awayTeamScore) {
         if (homeTeamScore > awayTeamScore) {
             homeTeam.setWins(homeTeam.getWins() + 1);
             awayTeam.setLosses(awayTeam.getLosses() + 1);
@@ -68,15 +109,13 @@ public class TeamServiceImpl implements TeamService {
             homeTeam.setPoints(homeTeam.getPoints() + 1);
             awayTeam.setPoints(awayTeam.getPoints() + 1);
         }
+    }
 
-        homeTeam.setGoalsFor(homeTeam.getGoalsFor() + homeTeamScore);
-        homeTeam.setGoalsAgainst(homeTeam.getGoalsAgainst() + awayTeamScore);
-
-        awayTeam.setGoalsFor(awayTeam.getGoalsFor() + awayTeamScore);
-        awayTeam.setGoalsAgainst(awayTeam.getGoalsAgainst() + homeTeamScore);
-
-        saveTeam(homeTeam);
-        saveTeam(awayTeam);
+    private void setGoalDifferenceAfterMatch(Team team) {
+        if (team.getMatchesPlayed() == null){
+            team.setMatchesPlayed(0);
+        }
+        team.setGoalDifference(team.getGoalsFor() - team.getGoalsAgainst());
     }
 
     private void validateTeamValues(Team team) {

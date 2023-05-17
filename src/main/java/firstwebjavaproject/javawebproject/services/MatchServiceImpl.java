@@ -58,6 +58,17 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
+    public List<Match> getFirstFiveUpcomingMatches(Long teamId) {
+        return matchRepository.findTop5ByTeamIdAndMatchStateOrderByDateAsc(teamId, PageRequest.of(0, 5));
+    }
+
+    @Override
+    public List<Match> getAllUpcomingMatchesByTeamId(Long teamId) {
+        return matchRepository.findAllMatchesByIdOrderByDateAsc(teamId);
+    }
+
+
+    @Override
     public boolean checkIfBothTeamsScored(Match match) {
         if (match.getHomeTeamScore() != null && match.getAwayTeamScore() != null) {
             match.setMatchState(Match.MatchState.Finished);

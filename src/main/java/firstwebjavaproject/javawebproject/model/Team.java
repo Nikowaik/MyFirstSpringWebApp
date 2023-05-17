@@ -46,6 +46,9 @@ public class Team {
     @Column(name = "goal_difference")
     private Integer goalDifference;
 
+    @Column(name = "matches_played")
+    private Integer matchesPlayed;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "league_id")
     private League league;
@@ -156,6 +159,14 @@ public class Team {
 
     public void setWins(Integer wins) {
         this.wins = wins;
+    }
+
+    public Integer getMatchesPlayed() {
+        return matchesPlayed;
+    }
+
+    public void setMatchesPlayed(Integer matchesPlayed) {
+        this.matchesPlayed = matchesPlayed;
     }
 }
 

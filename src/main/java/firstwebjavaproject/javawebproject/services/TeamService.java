@@ -14,5 +14,6 @@ public interface TeamService {
     List<Team> getAwayTeamsById(Long leagueId);
     Team getTeamById(Long id);
     void updateStatus(Team homeTeam, Team awayTeam, int homeTeamScore, int awayTeamScore);
+    List<Team> getAllTeamsSortedByPoints(Long leagueId);
 
 }

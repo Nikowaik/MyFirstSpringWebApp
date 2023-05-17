@@ -119,5 +119,10 @@ public class MatchController {
         return "redirect:/matchesByDate?date=" + date;
     }
 
+    @GetMapping("/matches/upcoming/{teamId}")
+    public List<Match> getAllUpcomingMatchesByTeamId(@PathVariable("teamId") Long teamId) {
+        return matchService.getAllUpcomingMatchesByTeamId(teamId);
+    }
+
 }
 

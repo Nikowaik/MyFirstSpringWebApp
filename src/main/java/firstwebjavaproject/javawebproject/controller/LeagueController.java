@@ -7,6 +7,7 @@ import firstwebjavaproject.javawebproject.model.Team;
 import firstwebjavaproject.javawebproject.repository.TeamRepository;
 import firstwebjavaproject.javawebproject.services.CountryService;
 import firstwebjavaproject.javawebproject.services.LeagueService;
+import firstwebjavaproject.javawebproject.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,8 @@ public class LeagueController {
     private LeagueService leagueService;
     @Autowired
     private TeamRepository teamRepository;
+    @Autowired
+    private TeamService teamService;
 
     @GetMapping("league.html")
     public String leagueView(Model model){
@@ -70,7 +73,7 @@ public class LeagueController {
     @GetMapping("/league/{leagueId}/teams")
     public ModelAndView viewLeagueTeams(@PathVariable Long leagueId) {
         League league = leagueService.getLeagueById(leagueId);
-        List<Team> teams = teamRepository.findTeamsByLeagueId(leagueId);
+        List<Team> teams = teamService.getAllTeamsSortedByPoints(leagueId);
 
         ModelAndView mav = new ModelAndView("league-teams.html");
         mav.addObject("league", league);

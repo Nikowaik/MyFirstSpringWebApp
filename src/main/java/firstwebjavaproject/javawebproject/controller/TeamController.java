@@ -56,10 +56,19 @@ public class TeamController {
         Team team = teamService.getTeamById(teamId);
         List<Match> lastFiveMatches = matchService.getLastFiveMatches(teamId);
         List<Match> allPreviousMatches = matchService.getAllPreviousMatches(teamId);
+        List<Match> firstFiveMatches = matchService.getFirstFiveUpcomingMatches(teamId);
+        List<Match> allUpcomingMatches = matchService.getAllUpcomingMatchesByTeamId(teamId);
+        List<Team> teamsSorted = teamService.getAllTeamsSortedByPoints(team.getLeague().getId());
+
+        System.out.println("First five upcoming matches: " + firstFiveMatches);
 
         model.addAttribute("team", team);
         model.addAttribute("lastFiveMatches", lastFiveMatches);
         model.addAttribute("allPreviousMatches", allPreviousMatches);
+        model.addAttribute("firstFiveMatches", firstFiveMatches);
+        model.addAttribute("allUpcomingMatches", allUpcomingMatches);
+        model.addAttribute("teams", teamsSorted);
+
 
         return "team";
     }

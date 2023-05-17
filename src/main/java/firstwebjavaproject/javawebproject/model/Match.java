@@ -84,7 +84,7 @@ public class Match {
         return homeTeamScore;
     }
 
-    public Integer getLeagueId(){
+    public Long getLeagueId(){
         return this.league.getId();
     }
 

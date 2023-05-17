@@ -17,23 +17,65 @@
 <div id="summary" class="team-section">
     <h2>Last Five Matches</h2>
     <div th:each="match : ${lastFiveMatches}">
-        <p th:text="${match.homeTeam.name} + ' vs ' + ${match.awayTeam.name} + ' on ' + ${#temporals.format(match.date, 'yyyy-MM-dd')}"></p>
+        <p th:text="${match.homeTeam.name} + ' ' + ${match.homeTeamScore} + ' - ' + ${match.awayTeamScore} + ' ' + ${match.awayTeam.name} + ' on ' + ${#temporals.format(match.date, 'yyyy-MM-dd')}"></p>
     </div>
 </div>
 
 <div id="results" class="team-section" style="display: none;">
     <h2>All Previous Matches</h2>
     <div th:each="match : ${allPreviousMatches}">
-        <p th:text="${match.homeTeam.name} + ' vs ' + ${match.awayTeam.name} + ' on ' + ${#temporals.format(match.date, 'yyyy-MM-dd')}"></p>
+        <p th:text="${match.homeTeam.name} + ' ' + ${match.homeTeamScore} + ' - ' + ${match.awayTeamScore} + ' ' + ${match.awayTeam.name} + ' on ' + ${#temporals.format(match.date, 'yyyy-MM-dd')}"></p>
     </div>
 </div>
 
 <div id="fixtures" class="team-section" style="display: none;">
-    <!-- Add fixtures information here -->
-</div>
+    <h2>Upcoming Matches</h2>
+    <div id="matchContainer">
+        <div th:each="match : ${firstFiveMatches}">
+            <p th:text="${match.homeTeam.name} + ' vs ' + ${match.awayTeam.name} + ' on ' + ${#temporals.format(match.date, 'yyyy-MM-dd')}"></p>
+        </div>
+    </div>
 
-<div id="standings" class="team-section" style="display: none;">
-    <!-- Add standings information here -->
+    <div id="allMatches" style="display: none;">
+        <div th:each="match : ${allUpcomingMatches}">
+            <p th:text="${match.homeTeam.name} + ' vs ' + ${match.awayTeam.name} + ' on ' + ${#temporals.format(match.date, 'yyyy-MM-dd')}"></p>
+        </div>
+    </div>
+    <button id="show-more" type="button" class="btn btn-secondary" onclick="loadAllMatches()">Show more</button>
+    <button id="show-less" type="button" class="btn btn-secondary" style="display: none" onclick="loadLessMatches()">Show less</button>
+</div>
+        <div id="standings" class="team-section" style="display: none;">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Position</th>
+            <th>Team Name</th>
+            <th>P</th>
+            <th>W</th>
+            <th>D</th>
+            <th>L</th>
+            <th>GS</th>
+            <th>GC</th>
+            <th>GD</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="team, i : ${teams}">
+            <td th:text="${i.count}"></td>
+            <td th:text="${team.name}"></td>
+            <td th:text="${team.points}"></td>
+            <td th:text="${team.wins}"></td>
+            <td th:text="${team.draws}"></td>
+            <td th:text="${team.losses}"></td>
+            <td th:text="${team.goalsFor}"></td>
+            <td th:text="${team.goalsAgainst}"></td>
+            <td th:text="${team.goalDifference}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
 </div>
 
 <!-- Add Bootstrap and jQuery JavaScript -->
@@ -50,6 +92,24 @@
             // Show the selected section
             document.getElementById(sectionId).style.display = 'block';
         }
+</script>
+
+<script>
+   function loadAllMatches() {
+    document.getElementById('matchContainer').style.display = 'none';
+    document.getElementById('allMatches').style.display = 'block';
+    document.getElementById('show-more').style.display = 'none';  // hide 'show-more' button
+    document.getElementById('show-less').style.display = 'block';  // show 'show-less' button
+}
+
+function loadLessMatches() {
+    document.getElementById('matchContainer').style.display = 'block';
+    document.getElementById('allMatches').style.display = 'none';
+    document.getElementById('show-more').style.display = 'block';  // show 'show-more' button
+    document.getElementById('show-less').style.display = 'none';  // hide 'show-less' button
+}
+
+
 </script>
 </body>
 </html>

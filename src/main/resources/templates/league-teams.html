@@ -15,25 +15,41 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col">
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>Position</th>
-                    <th>Team Name</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="team, i : ${teams}">
-                    <td th:text="${i.count}"></td>
-                    <td th:text="${team.name}"></td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="col">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Team Name</th>
+                        <th>MP</th>
+                        <th>P</th>
+                        <th>W</th>
+                        <th>D</th>
+                        <th>L</th>
+                        <th>GS</th>
+                        <th>GC</th>
+                        <th>GD</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="team, i : ${teams}">
+                        <td th:text="${i.count}"></td>
+                        <td th:text="${team.name}"></td>
+                        <td th:text="${team.matchesPlayed}"></td>
+                        <td th:text="${team.points}"></td>
+                        <td th:text="${team.wins}"></td>
+                        <td th:text="${team.draws}"></td>
+                        <td th:text="${team.losses}"></td>
+                        <td th:text="${team.goalsFor}"></td>
+                        <td th:text="${team.goalsAgainst}"></td>
+                        <td th:text="${team.goalDifference}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
 </body>
 </html>
