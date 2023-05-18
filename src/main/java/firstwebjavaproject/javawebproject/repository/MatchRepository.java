@@ -22,7 +22,7 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     @Query("SELECT m FROM Match m WHERE (m.homeTeam.id = :teamId OR m.awayTeam.id = :teamId) AND m.matchState = 'ToBePlayed' ORDER BY m.date ASC")
     List<Match> findTop5ByTeamIdAndMatchStateOrderByDateAsc(@Param("teamId") Long teamId, Pageable pageable);
 
-    @Query("SELECT m FROM Match m WHERE m.homeTeam.id = :teamId OR m.awayTeam.id = :teamId ORDER BY m.date ASC")
+    @Query("SELECT m FROM Match m WHERE (m.homeTeam.id = :teamId OR m.awayTeam.id = :teamId) AND m.matchState = 'ToBePlayed' ORDER BY m.date ASC")
     List<Match> findAllMatchesByIdOrderByDateAsc(@Param("teamId") Long teamId);
 
 }

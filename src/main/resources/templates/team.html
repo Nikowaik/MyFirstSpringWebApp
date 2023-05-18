@@ -12,6 +12,7 @@
     <button type="button" class="btn btn-secondary" onclick="showSection('results')">Results</button>
     <button type="button" class="btn btn-secondary" onclick="showSection('fixtures')">Fixtures</button>
     <button type="button" class="btn btn-secondary" onclick="showSection('standings')">Standings</button>
+    <button type="button" class="btn btn-secondary" onclick="showSection('players')">Players</button>
 </div>
 
 <div id="summary" class="team-section">
@@ -76,6 +77,33 @@
 
 
 
+</div>
+
+<div id="players" class="team-section" style="display: none;">
+    <h2>Players</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Nationality</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="player : ${players}">
+            <td th:text="${player.firstName}"></td>
+            <td th:text="${player.lastName}"></td>
+            <td th:text="${player.nationality.name}"></td>
+            <td>
+                <a th:href="@{/players/edit/{id}(id=${player.id})}" class="btn btn-info">Edit</a>
+                <a th:href="@{/players/delete/{id}(id=${player.id})}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/createPlayer/{teamId}(teamId=${team.id})}" class="btn btn-primary">Add New Player</a>
 </div>
 
 <!-- Add Bootstrap and jQuery JavaScript -->

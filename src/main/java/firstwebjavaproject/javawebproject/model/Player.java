@@ -27,8 +27,11 @@ public class Player {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    @Column(name = "goals")
+    private Integer goals;
+
+    @Column(name = "assists")
+    private Integer assists;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nationality_id")
@@ -44,13 +47,14 @@ public class Player {
         super();
     }
 
-    public Player(String firstName, String lastName, LocalDate dateOfBirth, Country nationality, Team team) {
+    public Player(String firstName, String lastName, Country nationality, Team team) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
-        this.dateOfBirth = dateOfBirth;
         this.nationality = nationality;
         this.team = team;
+        this.goals = 0;
+        this.assists = 0;
     }
 
     public Integer getId() {
@@ -77,14 +81,6 @@ public class Player {
         this.lastName = lastName;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public Country getNationality() {
         return nationality;
     }
@@ -101,6 +97,12 @@ public class Player {
         this.team = team;
     }
 
-    // getters and setters
+    public Integer getGoals() {
+        return goals;
+    }
+
+    public void setGoals(Integer goals) {
+        this.goals = goals;
+    }
 }
 

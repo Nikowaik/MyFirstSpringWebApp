@@ -113,7 +113,7 @@
         </thead>
         <tbody>
             <tr th:each="team : ${teams}">
-            <td th:text="${team.name}"></td>
+             <td><a th:href="@{'/team/' + ${team.id}}" th:text="${team.name}"></a></td>
             <td th:text="${team.league.name}"></td>
             <td>
                 <form th:action="@{'/deleteTeam/' + ${team.id}}" method="POST">
