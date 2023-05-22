@@ -5,6 +5,44 @@
     <!-- Add Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+    #editModal {
+  display: none;
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+}
+
+
+</style>
 <body>
 <h1 th:text="${team.name}"></h1>
 <div class="btn-group" role="group">
@@ -43,9 +81,11 @@
         </div>
     </div>
     <button id="show-more" type="button" class="btn btn-secondary" onclick="loadAllMatches()">Show more</button>
-    <button id="show-less" type="button" class="btn btn-secondary" style="display: none" onclick="loadLessMatches()">Show less</button>
+    <button id="show-less" type="button" class="btn btn-secondary" style="display: none" onclick="loadLessMatches()">
+        Show less
+    </button>
 </div>
-        <div id="standings" class="team-section" style="display: none;">
+<div id="standings" class="team-section" style="display: none;">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
@@ -74,7 +114,6 @@
         </tr>
         </tbody>
     </table>
-
 
 
 </div>
@@ -106,10 +145,31 @@
     <a th:href="@{/createPlayer/{teamId}(teamId=${team.id})}" class="btn btn-primary">Add New Player</a>
 </div>
 
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <form id="editForm">
+            <label for="editFirstName">First Name</label>
+            <input type="text" id="editFirstName" name="firstName">
+            <label for="editLastName">Last Name</label>
+            <input type="text" id="editLastName" name="lastName">
+            <label for="editNationality">Nationality</label>
+            <select id="editNationality" name="nationality">
+            </select>
+            <label for="editTeam">Team</label>
+            <select id="editTeam" name="team">
+            </select>
+            <input type="hidden" id="editPlayerId">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+
 <!-- Add Bootstrap and jQuery JavaScript -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
         function showSection(sectionId) {
             // Hide all sections
@@ -120,6 +180,7 @@
             // Show the selected section
             document.getElementById(sectionId).style.display = 'block';
         }
+
 </script>
 
 <script>
@@ -136,6 +197,131 @@ function loadLessMatches() {
     document.getElementById('show-more').style.display = 'block';  // show 'show-more' button
     document.getElementById('show-less').style.display = 'none';  // hide 'show-less' button
 }
+
+    $('.btn-info').mousedown(function(e) {
+        e.preventDefault();
+
+        var playerId = $(this).attr('href').split('/')[3];
+
+        $.ajax({
+                url: '/players/edit/' + playerId,
+        type: 'GET',
+            success: function(player) {
+                $('#editFirstName').val(player.firstName);
+                $('#editLastName').val(player.lastName);
+                $('#editPlayerId').val(player.id);
+
+            if (!player.team || !player.nationality) {
+        console.error('Player with no team or nationality:', player);
+    }
+
+                // Get teams
+                $.getJSON('/api/teams', function(teams) {
+                    $('#editTeam').empty();
+                    $.each(teams, function(i, team) {
+                        $('#editTeam').append($('<option>', {
+                            value: team.id,
+                            text : team.name,
+                            selected: team.id === player.team.id
+
+                        }));
+                        console.log(teams);
+                    });
+
+                });
+
+
+                $.getJSON('/api/countries', function(nationalities) {
+                    $('#editNationality').empty();
+                    $.each(nationalities, function(i, nationality) {
+                        $('#editNationality').append($('<option>', {
+                            value: nationality.id,
+                            text : nationality.name,
+                            selected: nationality.id === player.nationality.id
+                        }));
+                        console.log(nationalities);
+                    });
+                });
+                $('#editModal').show();
+            }
+        });
+
+    });
+
+    // Clicking anywhere outside the modal will close it
+    $(window).click(function(event) {
+        if (event.target == document.getElementById('editModal')) {
+            $('#editModal').hide();
+        }
+    });
+
+
+<!--// Using jQuery-->
+
+<!--$(document).ready(function() {-->
+<!--  // Edit button click-->
+<!--  $('.btn-info').click(function(e) {-->
+<!--    e.preventDefault();-->
+
+<!--    // Extract player id from the Edit button's href attribute-->
+<!--    var playerId = $(this).attr('href').split('/')[3];-->
+
+<!--    $.ajax({-->
+<!--      url: '/players/' + playerId,-->
+<!--      type: 'GET',-->
+<!--      success: function(player) {-->
+<!--        // Populate the edit form with the player data-->
+<!--        $('#editFirstName').val(player.firstName);-->
+<!--        $('#editLastName').val(player.lastName);-->
+<!--        $('#editNationality').val(player.nationality);-->
+<!--        $('#editTeam').val(player.team);-->
+<!--        $('#editPlayerId').val(player.id);-->
+
+<!--        // Show the modal-->
+<!--        $('#editModal').show();-->
+<!--      }-->
+<!--    });-->
+<!--  });-->
+
+<!--  // Submitting the edit form-->
+<!--  $('#editForm').submit(function(e) {-->
+<!--    e.preventDefault();-->
+
+<!--    var playerId = $('#editPlayerId').val();-->
+
+<!--    $.ajax({-->
+<!--      url: '/players/edit/' + playerId,-->
+<!--      type: 'POST',-->
+<!--      data: $(this).serialize(),-->
+<!--      success: function() {-->
+<!--        // Hide the modal-->
+<!--        $('#editModal').hide();-->
+
+<!--        // Reload the page to update the player list-->
+<!--        location.reload();-->
+<!--      }-->
+<!--    });-->
+<!--  });-->
+
+<!--  // Delete button click-->
+<!--  $('.btn-danger').click(function(e) {-->
+<!--    e.preventDefault();-->
+
+<!--    // Extract player id from the Delete button's href attribute-->
+<!--    var playerId = $(this).attr('href').split('/')[3];-->
+
+<!--    $.ajax({-->
+<!--      url: '/players/delete/' + playerId,-->
+<!--      type: 'POST',-->
+<!--      success: function() {-->
+<!--        // Reload the page to update the player list-->
+<!--        location.reload();-->
+<!--      }-->
+<!--    });-->
+<!--  });-->
+<!--});-->
+
+
 
 
 </script>

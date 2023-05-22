@@ -2,7 +2,9 @@ package firstwebjavaproject.javawebproject.model;
 
 
 import java.time.LocalDate;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "Player")
 public class Player {
 
@@ -33,12 +36,14 @@ public class Player {
     @Column(name = "assists")
     private Integer assists;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nationality_id")
+    @JsonIgnoreProperties("players")
     private Country nationality;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")
+    @JsonIgnoreProperties("players")
     private Team team;
 
 
@@ -55,6 +60,7 @@ public class Player {
         this.team = team;
         this.goals = 0;
         this.assists = 0;
+
     }
 
     public Integer getId() {
@@ -85,6 +91,12 @@ public class Player {
         return nationality;
     }
 
+    @JsonProperty("nationality_id")
+    public Integer getNationalityId(){return this.nationality.getId();};
+
+    @JsonProperty("team_id")
+    public Long getTeamId(){return this.team.getId();};
+
     public void setNationality(Country nationality) {
         this.nationality = nationality;
     }
@@ -104,5 +116,9 @@ public class Player {
     public void setGoals(Integer goals) {
         this.goals = goals;
     }
+
+    public Integer getAssists() {return assists;}
+
+    public void setAssists(){this.assists =assists;}
 }
 

@@ -3,6 +3,10 @@ package firstwebjavaproject.javawebproject.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +16,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Table(name = "country")
 public class Country {
 
@@ -24,8 +31,12 @@ public class Country {
     private String name;
 
     @OneToMany(mappedBy = "nationality")
+    @JsonManagedReference
     private Set<Player> players = new HashSet<>();
 
+    @OneToMany(mappedBy = "country")
+    @JsonManagedReference
+    private Set<League> leagues;
 
     public Country() {
         super();

@@ -2,9 +2,11 @@ package firstwebjavaproject.javawebproject.controller;
 
 import firstwebjavaproject.javawebproject.model.League;
 import firstwebjavaproject.javawebproject.model.Match;
+import firstwebjavaproject.javawebproject.model.Player;
 import firstwebjavaproject.javawebproject.model.Team;
 import firstwebjavaproject.javawebproject.services.LeagueService;
 import firstwebjavaproject.javawebproject.services.MatchService;
+import firstwebjavaproject.javawebproject.services.PlayerService;
 import firstwebjavaproject.javawebproject.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,8 @@ public class TeamController {
     private LeagueService leagueService;
     @Autowired
     private MatchService matchService;
+    @Autowired
+    private PlayerService playerService;
 
     @GetMapping("teams.html")
    public String showAllTeam(Model model){
@@ -59,6 +63,7 @@ public class TeamController {
         List<Match> firstFiveMatches = matchService.getFirstFiveUpcomingMatches(teamId);
         List<Match> allUpcomingMatches = matchService.getAllUpcomingMatchesByTeamId(teamId);
         List<Team> teamsSorted = teamService.getAllTeamsSortedByPoints(team.getLeague().getId());
+        List<Player> allPlayers = playerService.getAllPlayersByTeam(teamId);
 
         System.out.println("First five upcoming matches: " + team);
 
@@ -68,6 +73,7 @@ public class TeamController {
         model.addAttribute("firstFiveMatches", firstFiveMatches);
         model.addAttribute("allUpcomingMatches", allUpcomingMatches);
         model.addAttribute("teams", teamsSorted);
+        model.addAttribute("players", allPlayers);
 
 
         return "team";

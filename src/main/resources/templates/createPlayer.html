@@ -8,7 +8,7 @@
 <body>
 <div class="container">
     <h1 class="mt-4 mb-4">Create Player</h1>
-    <form th:action="@{/createPlayer}" th:object="${player}" method="post">
+    <form th:action="@{/savePlayer}" th:object="${player}" method="post">
         <div class="form-group">
             <label for="firstName">First Name</label>
             <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter First Name">
@@ -28,9 +28,7 @@
             <input type="text" class="form-control" id="team" th:value="${team.name}" readonly>
             <input type="hidden" name="team" th:value="${team.id}">
         </div>
-            <form action="#" th:action="@{/savePlayer}" th:object="${player}" method="POST">
-                <button type="submit" class="btn btn-info col-2"> Save Player</button>
-            </form>
+        <button type="submit" class="btn btn-info col-2"> Save Player</button>
     </form>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
