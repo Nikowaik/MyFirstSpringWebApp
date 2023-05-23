@@ -1,5 +1,6 @@
 package firstwebjavaproject.javawebproject.services;
 
+import firstwebjavaproject.javawebproject.dto.TeamDTO;
 import firstwebjavaproject.javawebproject.model.Match;
 import firstwebjavaproject.javawebproject.model.Team;
 
@@ -15,5 +16,6 @@ public interface TeamService {
     Team getTeamById(Long id);
     void updateStatus(Team homeTeam, Team awayTeam, int homeTeamScore, int awayTeamScore);
     List<Team> getAllTeamsSortedByPoints(Long leagueId);
+    List<TeamDTO> getAllTeamsAsDto();
 
 }

@@ -1,5 +1,7 @@
 package firstwebjavaproject.javawebproject.controller;
 
+import firstwebjavaproject.javawebproject.dto.CountryDTO;
+import firstwebjavaproject.javawebproject.dto.TeamDTO;
 import firstwebjavaproject.javawebproject.model.Country;
 import firstwebjavaproject.javawebproject.model.Team;
 import firstwebjavaproject.javawebproject.services.CountryService;
@@ -18,12 +20,12 @@ public class ApiController {
     private TeamService teamService;
 
     @GetMapping("/api/countries")
-    public List<Country> getCountries(){
-        return countryService.getAllCountries();
+    public List<CountryDTO> getCountries(){
+        return countryService.getAllCountriesAsDto();
     }
 
     @GetMapping("/api/teams")
-    public List<Team> getTeams() {
-        return teamService.getAllTeams();
+    public List<TeamDTO> getTeams() {
+        return teamService.getAllTeamsAsDto();
     }
 }

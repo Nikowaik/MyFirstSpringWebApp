@@ -6,6 +6,8 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <style>
+
+
     #editModal {
   display: none;
 
@@ -42,8 +44,40 @@
 }
 
 
+
+
 </style>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Football Site</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="matches.html">Matches</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="standings.html">Standings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="teams.html">Teams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="league.html">Leagues</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="countries.html">Countries</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="news.html">News</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
 <h1 th:text="${team.name}"></h1>
 <div class="btn-group" role="group">
     <button type="button" class="btn btn-secondary" onclick="showSection('summary')">Summary</button>
@@ -147,7 +181,7 @@
 
 <div id="editModal" class="modal">
     <div class="modal-content">
-        <form id="editForm">
+        <form id="editForm" action="/submit-form" method="POST">
             <label for="editFirstName">First Name</label>
             <input type="text" id="editFirstName" name="firstName">
             <label for="editLastName">Last Name</label>
@@ -156,8 +190,7 @@
             <select id="editNationality" name="nationality">
             </select>
             <label for="editTeam">Team</label>
-            <select id="editTeam" name="team">
-            </select>
+            <select class="form-control" id="editTeam" name="team"></select>
             <input type="hidden" id="editPlayerId">
             <button type="submit">Submit</button>
         </form>
@@ -181,6 +214,8 @@
             document.getElementById(sectionId).style.display = 'block';
         }
 
+
+
 </script>
 
 <script>
@@ -198,7 +233,7 @@ function loadLessMatches() {
     document.getElementById('show-less').style.display = 'none';  // hide 'show-less' button
 }
 
-    $('.btn-info').mousedown(function(e) {
+    $('.btn-info').click(function(e) {
         e.preventDefault();
 
         var playerId = $(this).attr('href').split('/')[3];
@@ -207,6 +242,7 @@ function loadLessMatches() {
                 url: '/players/edit/' + playerId,
         type: 'GET',
             success: function(player) {
+
                 $('#editFirstName').val(player.firstName);
                 $('#editLastName').val(player.lastName);
                 $('#editPlayerId').val(player.id);
@@ -214,6 +250,8 @@ function loadLessMatches() {
             if (!player.team || !player.nationality) {
         console.error('Player with no team or nationality:', player);
     }
+
+
 
                 // Get teams
                 $.getJSON('/api/teams', function(teams) {
@@ -225,7 +263,6 @@ function loadLessMatches() {
                             selected: team.id === player.team.id
 
                         }));
-                        console.log(teams);
                     });
 
                 });
@@ -239,7 +276,6 @@ function loadLessMatches() {
                             text : nationality.name,
                             selected: nationality.id === player.nationality.id
                         }));
-                        console.log(nationalities);
                     });
                 });
                 $('#editModal').show();
@@ -255,73 +291,66 @@ function loadLessMatches() {
         }
     });
 
-
-<!--// Using jQuery-->
-
-<!--$(document).ready(function() {-->
-<!--  // Edit button click-->
-<!--  $('.btn-info').click(function(e) {-->
+<!--$('#editForm').submit(function(e) {-->
 <!--    e.preventDefault();-->
 
-<!--    // Extract player id from the Edit button's href attribute-->
-<!--    var playerId = $(this).attr('href').split('/')[3];-->
+<!--    var player = {-->
+<!--        id: $('#editPlayerId').val(),-->
+<!--        firstName: $('#editFirstName').val(),-->
+<!--        lastName: $('#editLastName').val(),-->
+<!--        team: {-->
+<!--            id: $('#editTeam').val()-->
+<!--        },-->
+<!--        nationality: {-->
+<!--            id: $('#editNationality').val()-->
+<!--        }-->
+<!--    };-->
 
 <!--    $.ajax({-->
-<!--      url: '/players/' + playerId,-->
-<!--      type: 'GET',-->
-<!--      success: function(player) {-->
-<!--        // Populate the edit form with the player data-->
-<!--        $('#editFirstName').val(player.firstName);-->
-<!--        $('#editLastName').val(player.lastName);-->
-<!--        $('#editNationality').val(player.nationality);-->
-<!--        $('#editTeam').val(player.team);-->
-<!--        $('#editPlayerId').val(player.id);-->
+<!--        url: '/edit/' + player.id,-->
+<!--        type: 'PUT',-->
+<!--        contentType: 'application/json',-->
+<!--        data: JSON.stringify(player),-->
+<!--        success: function(response) {-->
+<!--            // Close the modal-->
+<!--            $('#editModal').hide();-->
 
-<!--        // Show the modal-->
-<!--        $('#editModal').show();-->
-<!--      }-->
+<!--            // You can add more actions here, like updating the page to show the new player info-->
+<!--        },-->
+<!--        error: function(jqXHR, textStatus, errorThrown) {-->
+<!--            console.error('Error:', textStatus, errorThrown);-->
+<!--        }-->
 <!--    });-->
-<!--  });-->
-
-<!--  // Submitting the edit form-->
-<!--  $('#editForm').submit(function(e) {-->
-<!--    e.preventDefault();-->
-
-<!--    var playerId = $('#editPlayerId').val();-->
-
-<!--    $.ajax({-->
-<!--      url: '/players/edit/' + playerId,-->
-<!--      type: 'POST',-->
-<!--      data: $(this).serialize(),-->
-<!--      success: function() {-->
-<!--        // Hide the modal-->
-<!--        $('#editModal').hide();-->
-
-<!--        // Reload the page to update the player list-->
-<!--        location.reload();-->
-<!--      }-->
-<!--    });-->
-<!--  });-->
-
-<!--  // Delete button click-->
-<!--  $('.btn-danger').click(function(e) {-->
-<!--    e.preventDefault();-->
-
-<!--    // Extract player id from the Delete button's href attribute-->
-<!--    var playerId = $(this).attr('href').split('/')[3];-->
-
-<!--    $.ajax({-->
-<!--      url: '/players/delete/' + playerId,-->
-<!--      type: 'POST',-->
-<!--      success: function() {-->
-<!--        // Reload the page to update the player list-->
-<!--        location.reload();-->
-<!--      }-->
-<!--    });-->
-<!--  });-->
 <!--});-->
 
+document.getElementById("editForm").addEventListener("submit", function(e){
+    e.preventDefault()
+});
 
+document.querySelector("#editForm button[type='submit']").addEventListener("click", function(e) {
+    var player = {
+        id: $('#editPlayerId').val(),
+        firstName: $('#editFirstName').val(),
+        lastName: $('#editLastName').val(),
+        teamId: $('#editTeam').val(),
+        nationalityId: $('#editNationality').val()
+    };
+
+    $.ajax({
+        url: '/edit/' + player.id,
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(player),
+        success: function(response) {
+            // Close the modal
+            $('#editModal').hide();
+            // You can add more actions here, like updating the page to show the new player info
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error:', textStatus, errorThrown);
+        }
+    });
+});
 
 
 </script>

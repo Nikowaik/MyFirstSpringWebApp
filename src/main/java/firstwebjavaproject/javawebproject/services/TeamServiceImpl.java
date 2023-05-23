@@ -1,5 +1,6 @@
 package firstwebjavaproject.javawebproject.services;
 
+import firstwebjavaproject.javawebproject.dto.TeamDTO;
 import firstwebjavaproject.javawebproject.model.Team;
 import firstwebjavaproject.javawebproject.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -78,6 +80,17 @@ public class TeamServiceImpl implements TeamService {
                 .thenComparing(Team::getGoalsFor).reversed());
 
         return teams;
+    }
+
+    @Override
+    public List<TeamDTO> getAllTeamsAsDto() {
+
+        List<Team> teams = teamRepository.findAll();
+
+
+        return teams.stream()
+                .map(TeamDTO::new)
+                .collect(Collectors.toList());
     }
 
     private void setMatchesPlayedForBothTeams(Team team) {

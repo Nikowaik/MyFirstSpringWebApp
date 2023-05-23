@@ -114,7 +114,7 @@
         <tbody>
             <tr th:each="team : ${teams}">
              <td><a th:href="@{'/team/' + ${team.id}}" th:text="${team.name}"></a></td>
-            <td th:text="${team.league.name}"></td>
+                <td><a th:href="@{/league/{leagueId}/teams(leagueId=${team.league.id})}" th:text="${team.league.name}"></a></td>
             <td>
                 <form th:action="@{'/deleteTeam/' + ${team.id}}" method="POST">
                     <button type="submit" class="btn btn-danger">

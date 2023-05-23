@@ -1,11 +1,15 @@
 package firstwebjavaproject.javawebproject.controller;
 
+import firstwebjavaproject.javawebproject.dto.PlayerDTO;
+import firstwebjavaproject.javawebproject.model.Country;
 import firstwebjavaproject.javawebproject.model.Player;
+import firstwebjavaproject.javawebproject.model.Team;
 import firstwebjavaproject.javawebproject.services.CountryService;
 import firstwebjavaproject.javawebproject.services.PlayerService;
 import firstwebjavaproject.javawebproject.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +20,7 @@ import java.util.Optional;
 
 @Controller
 public class PlayerController {
+
     @Autowired
     private PlayerService playerService;
     @Autowired
@@ -48,12 +53,22 @@ public class PlayerController {
 
     }
 
-    @PostMapping("/edit/{id}")
-    public ResponseEntity<?> saveEditedPlayer(@PathVariable Integer id, @Validated @RequestBody Player player){
+    @RequestMapping(value = "/edit/{id}", consumes = "application/json;charset=UTF-8", method = { RequestMethod.GET, RequestMethod.POST })
+    public ResponseEntity<?> saveEditedPlayer(@PathVariable Integer id, @Validated @RequestBody PlayerDTO playerDTO){
+        Team team = teamService.getTeamById(playerDTO.getTeamId());
+        Country country = countryService.getCountryById(playerDTO.getNationalityId());
+        Player player = new Player();
         player.setId(id);
+        player.setFirstName(playerDTO.getFirstName());
+        player.setLastName(playerDTO.getLastName());
+        player.setTeam(team);
+        player.setNationality(country);
+
+
         playerService.savePlayer(player);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(player, HttpStatus.OK);
     }
+
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<?> deletePlayer(@PathVariable Long id) {

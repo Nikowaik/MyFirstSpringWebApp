@@ -2,11 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Football Site</title>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
+    <title>Matches By Date</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+        .match {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: white;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
+        }
+        .team {
+            flex-basis: 40%;
+        }
+        .score {
+            flex-basis: 20%;
+            text-align: center;
+        }
+        .delete-match {
+            align-self: center;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,42 +64,81 @@
     </div>
 </nav>
 
+<div class="container">
+    <h1 class="my-4">Matches By Date</h1>
+    <form th:action="@{/matchesByDate}" method="get" id="dateForm">
+        <div class="form-group">
+            <label for="date">Select Date:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="button" id="decrementDate">-</button>
+                </div>
+                <input type="date" id="date" name="date" class="form-control" th:value="${date}" required="required" onChange="submitForm()" />
 
-<div class="container my-5">
-    <h1 class="text-center">Today's Matches</h1>
-    <div class="d-flex justify-content-between align-items-center my-4">
-        <h5 class="m-0">April 25, 2023</h5>
-        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#calendarModal">
-            Calendar
-        </button>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="incrementDate">+</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <hr>
+
+    <div th:each="entry : ${leagueMatchesMap}">
+        <h2 th:text="${entry.key.name}"></h2>
+        <div th:each="match : ${entry.value}" class="match">
+            <!-- Add <a> tag for home team -->
+            <div class="team">
+                <a th:href="@{'/team/' + ${match.homeTeam.id}}" th:text="${match.homeTeam.name}"></a>
+            </div>
+            <div class="score"
+                 th:text="|${match.homeTeamScore != null ? match.homeTeamScore : ''} - ${match.awayTeamScore != null ? match.awayTeamScore : ''}|">
+            </div>
+
+            <!-- Add <a> tag for away team -->
+            <div class="team">
+                <a th:href="@{'/team/' + ${match.awayTeam.id}}" th:text="${match.awayTeam.name}"></a>
+            </div>
+            <form th:action="@{'/deleteMatch/' + ${match.id} + '/' + ${date}}" method="post">
+                <button class="btn btn-danger btn-sm delete-match" th:data-match-id="${match.id}">Delete</button>
+            </form>
+        </div>
     </div>
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>Time</th>
-            <th>Date</th>
-            <th>Home Team</th>
-            <th>Away Team</th>
-            <th>Score</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>12:00</td>
-            <td>April 25, 2023</td>
-            <td>Real Madrid</td>
-            <td>Barcelona</td>
-            <td>3 - 1</td>
-        </tr>
-        <tr>
-            <td>15:00</td>
-            <td>April 25, 2023</td>
-            <td>Manchester United</td>
-            <td>Liverpool</td>
-            <td>1 - 1</td>
-        </tr>
-        </tbody>
-    </table>
 </div>
+
+<!-- Add Bootstrap and jQuery JavaScript -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function submitForm() {
+        document.getElementById("dateForm").submit();
+    }
+</script>
+<script type="text/javascript">
+    const dateInput = document.getElementById("date");
+    const decrementDateButton = document.getElementById("decrementDate");
+    const incrementDateButton = document.getElementById("incrementDate");
+
+    decrementDateButton.addEventListener("click", function() {
+        changeDate(-1);
+    });
+
+    incrementDateButton.addEventListener("click", function() {
+        changeDate(1);
+    });
+
+    function changeDate(days) {
+        let currentDate = new Date(dateInput.value);
+        currentDate.setDate(currentDate.getDate() + days);
+        dateInput.value = currentDate.toISOString().split('T')[0]; // Change the date input value to the new date
+        submitForm();
+    }
+
+    function submitForm() {
+        document.getElementById("dateForm").submit();
+    }
+</script>
+
 </body>
 </html>

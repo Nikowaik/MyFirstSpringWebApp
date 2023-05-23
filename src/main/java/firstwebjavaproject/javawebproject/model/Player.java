@@ -16,7 +16,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Table(name = "Player")
 public class Player {
 
@@ -43,9 +45,8 @@ public class Player {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")
-    @JsonIgnoreProperties("players")
+    @JsonIgnoreProperties("teams")
     private Team team;
-
 
 
     public Player() {
@@ -92,10 +93,16 @@ public class Player {
     }
 
     @JsonProperty("nationality_id")
-    public Integer getNationalityId(){return this.nationality.getId();};
+    public Long getNationalityId() {
+        return this.nationality.getId();
+    }
 
     @JsonProperty("team_id")
-    public Long getTeamId(){return this.team.getId();};
+    public Long getTeamId() {
+        return this.team.getId();
+    }
+
+    ;
 
     public void setNationality(Country nationality) {
         this.nationality = nationality;
@@ -117,8 +124,12 @@ public class Player {
         this.goals = goals;
     }
 
-    public Integer getAssists() {return assists;}
+    public Integer getAssists() {
+        return assists;
+    }
 
-    public void setAssists(){this.assists =assists;}
+    public void setAssists() {
+        this.assists = assists;
+    }
 }
 
