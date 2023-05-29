@@ -6,8 +6,10 @@ public class CountryDTO {
     private Long id;
     private String name;
 
-    //generate getters and setters
-    //generate constructor with parameters
+
+    public CountryDTO() {
+        super();
+    }
 
     public CountryDTO(Country country) {
         this.id = country.getId();

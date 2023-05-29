@@ -70,9 +70,17 @@ public class PlayerController {
     }
 
 
-    @PostMapping("/delete/{id}")
+    @RequestMapping(path = "players/delete/{id}", method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE })
     public ResponseEntity<?> deletePlayer(@PathVariable Long id) {
         playerService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/playerProfile/{id}")
+    public String showPlayerProfile(@PathVariable("id") Long id, Model model) {
+        Player player = playerService.getPlayerById(id);
+        model.addAttribute("player", player);
+        return "playerProfile";
+    }
+
 }

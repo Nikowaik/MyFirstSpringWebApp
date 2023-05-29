@@ -1,0 +1,24 @@
+{
+  "firstName": "Nikolay",
+  "lastName": "Kolev",
+  "goals": 10,
+  "assists": 5,
+  "team": {
+    "name": "Team B",
+    "league": {
+      "name": "Premier League",
+      "country": {
+        "name": "England"
+      }
+    }
+  },
+  "nationality": {
+    "name": "United States"
+  },
+  "playerProfile": {
+    "foot": "Right",
+    "position": "Forward",
+    "weight": 75,
+    "height":180
+  }
+}

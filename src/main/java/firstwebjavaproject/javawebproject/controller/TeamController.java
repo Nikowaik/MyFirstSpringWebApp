@@ -1,23 +1,15 @@
 package firstwebjavaproject.javawebproject.controller;
 
-import firstwebjavaproject.javawebproject.model.League;
-import firstwebjavaproject.javawebproject.model.Match;
-import firstwebjavaproject.javawebproject.model.Player;
-import firstwebjavaproject.javawebproject.model.Team;
-import firstwebjavaproject.javawebproject.services.LeagueService;
-import firstwebjavaproject.javawebproject.services.MatchService;
-import firstwebjavaproject.javawebproject.services.PlayerService;
-import firstwebjavaproject.javawebproject.services.TeamService;
+import firstwebjavaproject.javawebproject.model.*;
+import firstwebjavaproject.javawebproject.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -30,6 +22,10 @@ public class TeamController {
     private MatchService matchService;
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private AwardService awardService;
+    @Autowired
+    private PlayerAwardService playerAwardService;
 
     @GetMapping("teams.html")
    public String showAllTeam(Model model){
@@ -64,8 +60,10 @@ public class TeamController {
         List<Match> allUpcomingMatches = matchService.getAllUpcomingMatchesByTeamId(teamId);
         List<Team> teamsSorted = teamService.getAllTeamsSortedByPoints(team.getLeague().getId());
         List<Player> allPlayers = playerService.getAllPlayersByTeam(teamId);
+        List<PlayerAward> allPlayersAward = playerAwardService.getPlayerAwardsByTeamId(teamId);
 
         System.out.println("First five upcoming matches: " + team);
+        System.out.println("AllAwards: " + allPlayersAward);
 
         model.addAttribute("team", team);
         model.addAttribute("lastFiveMatches", lastFiveMatches);
@@ -74,6 +72,7 @@ public class TeamController {
         model.addAttribute("allUpcomingMatches", allUpcomingMatches);
         model.addAttribute("teams", teamsSorted);
         model.addAttribute("players", allPlayers);
+        model.addAttribute("playerAwards", allPlayersAward);
 
 
         return "team";
@@ -96,4 +95,40 @@ public class TeamController {
         teamService.deleteTeamById(id);
         return "redirect:/teams.html";
     }
+
+    @GetMapping("/createAward/{teamId}")
+    public String showCreateAwardForm(@PathVariable("teamId") Long teamId, Model model) {
+        Team team = teamService.getTeamById(teamId);
+        List<Player> players = playerService.getAllPlayersByTeam(teamId);
+
+        model.addAttribute("team", team);
+        model.addAttribute("players", players);
+        model.addAttribute("award", new Award());
+
+        return "createAward.html";
+    }
+
+    @PostMapping("/createAward/{teamId}")
+    public String createAward(@PathVariable("teamId") Long teamId,@ModelAttribute("award") Award award) {
+        // Create new Award entity and set name
+        Award awardEntity = new Award();
+        awardEntity.setName(award.getName());
+        List<Player> players = playerService.getPlayersById(award.getPlayerIds());
+        System.out.println("Players" + players);
+        awardService.save(awardEntity);
+
+
+        for (Player player : players) {
+            PlayerAward playerAward = new PlayerAward();
+            playerAward.setPlayer(player);
+            playerAward.setAward(awardEntity);
+            playerAward.setDate(LocalDate.now());
+
+
+
+            playerAwardService.save(playerAward);
+        }
+        return "redirect:/team/" + teamId;
+    }
+
 }

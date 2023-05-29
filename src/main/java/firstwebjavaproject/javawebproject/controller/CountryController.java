@@ -4,8 +4,11 @@ import firstwebjavaproject.javawebproject.model.Country;
 import firstwebjavaproject.javawebproject.services.CountryService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +34,19 @@ public class CountryController {
 
 
     @PostMapping("/saveCountry")
-    public String saveCountry(@ModelAttribute("country") Country country){
+    public String saveCountry(@ModelAttribute("country") @Validated Country country, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "new_country"; //replace this with your form page
+        }
 
-        countryService.saveCountry(country);
+        try {
+            countryService.saveCountry(country);
+        } catch (DataIntegrityViolationException ex) {
+            result.rejectValue("name", "error.country", "Country already exists");
+            return "new_country"; //replace this with your form page
+        }
+
         return "redirect:/countries.html";
     }
+
 }

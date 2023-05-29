@@ -31,7 +31,7 @@ public class Standing {
         super();
     }
 
-    public Standing(Team team, League league) {
+    private Standing(Team team, League league) {
         super();
         this.team = team;
         this.league = league;

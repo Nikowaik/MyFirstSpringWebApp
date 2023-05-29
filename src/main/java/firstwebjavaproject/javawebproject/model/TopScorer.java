@@ -31,7 +31,7 @@ public class TopScorer {
         super();
     }
 
-    public TopScorer(Player player, League league) {
+    private TopScorer(Player player, League league) {
         super();
         this.player = player;
         this.league = league;

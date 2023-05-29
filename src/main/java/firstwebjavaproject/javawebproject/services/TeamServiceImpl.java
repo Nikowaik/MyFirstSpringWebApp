@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -91,6 +92,19 @@ public class TeamServiceImpl implements TeamService {
         return teams.stream()
                 .map(TeamDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Team getDefaultTeam() {
+        Optional<Team> optionalTeam = teamRepository.findByName("LEVSKI SOFIA");
+        if(optionalTeam.isPresent()) {
+            return optionalTeam.get();
+        } else {
+
+            Team defaultTeam = new Team();
+            defaultTeam.setName("LEVSKI SOFIA");
+            return teamRepository.save(defaultTeam);
+        }
     }
 
     private void setMatchesPlayedForBothTeams(Team team) {

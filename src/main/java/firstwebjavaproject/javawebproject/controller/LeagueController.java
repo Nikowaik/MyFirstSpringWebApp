@@ -1,5 +1,6 @@
 package firstwebjavaproject.javawebproject.controller;
 
+import firstwebjavaproject.javawebproject.exception.DuplicateLeagueException;
 import firstwebjavaproject.javawebproject.exception.LeagueNotEmptyException;
 import firstwebjavaproject.javawebproject.model.Country;
 import firstwebjavaproject.javawebproject.model.League;
@@ -9,14 +10,14 @@ import firstwebjavaproject.javawebproject.services.CountryService;
 import firstwebjavaproject.javawebproject.services.LeagueService;
 import firstwebjavaproject.javawebproject.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
@@ -47,10 +48,19 @@ public class LeagueController {
     }
 
     @PostMapping("/saveLeague")
-    public String saveLeague(@ModelAttribute("league") League league){
-        leagueService.saveLeague(league);
-        return "redirect:/league.html";
+    public String saveLeague(@ModelAttribute("league") League league, Model model){
+        try {
+            leagueService.saveLeague(league);
+            return "redirect:/league.html";
+        } catch (DuplicateLeagueException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("league", league);
+            model.addAttribute("countries", countryService.getAllCountries());
+            return "new_league";
+        }
     }
+
+
 
     @DeleteMapping("/deleteLeague/{id}")
     public ResponseEntity<?> deleteLeague(@PathVariable("id") Long id) {
@@ -86,5 +96,4 @@ public class LeagueController {
         leagueService.saveLeague(league);
         return "redirect:/league.html";
     }
-
 }

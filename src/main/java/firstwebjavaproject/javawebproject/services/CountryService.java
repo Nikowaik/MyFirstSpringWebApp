@@ -10,6 +10,7 @@ public interface CountryService {
      void saveCountry(Country country);
      List<CountryDTO> getAllCountriesAsDto();
      Country getCountryById(Long id);
+     Country getDefaultNationality();
 }
 
 

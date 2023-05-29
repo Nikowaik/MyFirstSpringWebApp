@@ -57,22 +57,22 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="matches.html">Matches</a>
+                <a class="nav-link" href="/matches.html">Matches</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="standings.html">Standings</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="teams.html">Teams</a>
+                <a class="nav-link" href="/teams.html">Teams</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="league.html">Leagues</a>
+                <a class="nav-link" href="/league.html">Leagues</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="countries.html">Countries</a>
+                <a class="nav-link" href="/countries.html">Countries</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="news.html">News</a>
+                <a class="nav-link" href="/news.html">News</a>
             </li>
         </ul>
     </div>
@@ -85,6 +85,7 @@
     <button type="button" class="btn btn-secondary" onclick="showSection('fixtures')">Fixtures</button>
     <button type="button" class="btn btn-secondary" onclick="showSection('standings')">Standings</button>
     <button type="button" class="btn btn-secondary" onclick="showSection('players')">Players</button>
+    <button type="button" class="btn btn-secondary" onclick="showSection('awards')">Awards</button>
 </div>
 
 <div id="summary" class="team-section">
@@ -137,7 +138,7 @@
         <tbody>
         <tr th:each="team, i : ${teams}">
             <td th:text="${i.count}"></td>
-            <td th:text="${team.name}"></td>
+            <td><a th:href="@{'/team/' + ${team.id}}" th:text="${team.name}"></a></td>
             <td th:text="${team.points}"></td>
             <td th:text="${team.wins}"></td>
             <td th:text="${team.draws}"></td>
@@ -165,18 +166,39 @@
         </thead>
         <tbody>
         <tr th:each="player : ${players}">
-            <td th:text="${player.firstName}"></td>
-            <td th:text="${player.lastName}"></td>
+            <td><a th:href="@{/playerProfile/{id}(id=${player.id})}" th:text="${player.firstName}"></a></td>
+            <td><a th:href="@{/playerProfile/{id}(id=${player.id})}" th:text="${player.lastName}"></a></td>
             <td th:text="${player.nationality.name}"></td>
             <td>
                 <a th:href="@{/players/edit/{id}(id=${player.id})}" class="btn btn-info">Edit</a>
-                <a th:href="@{/players/delete/{id}(id=${player.id})}" class="btn btn-danger">Delete</a>
+                <a href="#" class="btn btn-danger delete-button" th:data-player-id="${player.id}">Delete</a>
             </td>
         </tr>
         </tbody>
     </table>
 
     <a th:href="@{/createPlayer/{teamId}(teamId=${team.id})}" class="btn btn-primary">Add New Player</a>
+</div>
+
+<div id="awards" class="team-section" style="display: none;">
+    <h2>Awards</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Award Name</th>
+            <th>Player Name</th>
+            <th>Date of award</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="playerAward : ${playerAwards}">
+            <td th:text="${playerAward.award.name}"></td>
+            <td th:text="${playerAward.player.firstName} "></td>
+            <td th:text="${playerAward.date} "></td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/createAward/{teamId}(teamId=${team.id})}" class="btn btn-primary">Add New Award</a>
 </div>
 
 <div id="editModal" class="modal">
@@ -291,38 +313,6 @@ function loadLessMatches() {
         }
     });
 
-<!--$('#editForm').submit(function(e) {-->
-<!--    e.preventDefault();-->
-
-<!--    var player = {-->
-<!--        id: $('#editPlayerId').val(),-->
-<!--        firstName: $('#editFirstName').val(),-->
-<!--        lastName: $('#editLastName').val(),-->
-<!--        team: {-->
-<!--            id: $('#editTeam').val()-->
-<!--        },-->
-<!--        nationality: {-->
-<!--            id: $('#editNationality').val()-->
-<!--        }-->
-<!--    };-->
-
-<!--    $.ajax({-->
-<!--        url: '/edit/' + player.id,-->
-<!--        type: 'PUT',-->
-<!--        contentType: 'application/json',-->
-<!--        data: JSON.stringify(player),-->
-<!--        success: function(response) {-->
-<!--            // Close the modal-->
-<!--            $('#editModal').hide();-->
-
-<!--            // You can add more actions here, like updating the page to show the new player info-->
-<!--        },-->
-<!--        error: function(jqXHR, textStatus, errorThrown) {-->
-<!--            console.error('Error:', textStatus, errorThrown);-->
-<!--        }-->
-<!--    });-->
-<!--});-->
-
 document.getElementById("editForm").addEventListener("submit", function(e){
     e.preventDefault()
 });
@@ -342,15 +332,41 @@ document.querySelector("#editForm button[type='submit']").addEventListener("clic
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(player),
         success: function(response) {
-            // Close the modal
+
             $('#editModal').hide();
-            // You can add more actions here, like updating the page to show the new player info
+           location.reload();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error:', textStatus, errorThrown);
         }
     });
 });
+
+$('.delete-button').click(function() {
+    event.preventDefault();
+    var playerId = $(this).data('player-id'); // assumes each delete button has a data attribute 'data-player-id' with the player's ID
+    deletePlayer(playerId);
+});
+
+function deletePlayer(playerId) {
+    $.ajax({
+        url: '/players/delete/' + playerId,
+        type: 'DELETE',
+        success: function() {
+
+            $('#player-' + playerId).remove();
+
+        },
+        error: function(error) {
+            // Here you can handle any errors
+            console.error(error);
+        }
+    });
+}
+
+
+
+
 
 
 </script>

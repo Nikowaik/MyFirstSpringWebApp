@@ -1,5 +1,7 @@
 package firstwebjavaproject.javawebproject.services;
 
+import firstwebjavaproject.javawebproject.exception.DuplicateLeagueException;
+import firstwebjavaproject.javawebproject.model.Country;
 import firstwebjavaproject.javawebproject.model.League;
 import firstwebjavaproject.javawebproject.repository.LeagueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,14 @@ public class LeagueServiceImpl implements LeagueService
     }
 
     @Override
-    public void saveLeague(League league) {
+    public void saveLeague(League league) throws DuplicateLeagueException {
+        League existingLeague = leagueRepository.findByNameAndCountry(league.getName(), league.getCountry());
+        if (existingLeague != null) {
+            throw new DuplicateLeagueException("A league with this name already exists in this country.");
+        }
         this.leagueRepository.save(league);
     }
+
 
     @Override
     public void deleteLeagueById(Long id) {
@@ -38,6 +45,11 @@ public class LeagueServiceImpl implements LeagueService
         else{
             throw new NoSuchElementException("League not found with id: " + id);
         }
+    }
+
+    @Override
+    public League findByNameAndCountry(String name, Country country) {
+        return leagueRepository.findByNameAndCountry(name, country);
     }
 
 }

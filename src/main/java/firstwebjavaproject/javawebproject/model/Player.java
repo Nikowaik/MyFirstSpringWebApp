@@ -2,18 +2,12 @@ package firstwebjavaproject.javawebproject.model;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.*;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @JsonIdentityInfo(
@@ -48,6 +42,15 @@ public class Player {
     @JsonIgnoreProperties("teams")
     private Team team;
 
+
+    @OneToMany(mappedBy = "player")
+    @JsonIgnoreProperties("player")
+    private List<PlayerAward> playerAwards = new ArrayList<>();
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private PlayerProfile playerProfile;
 
     public Player() {
         super();
@@ -102,7 +105,6 @@ public class Player {
         return this.team.getId();
     }
 
-    ;
 
     public void setNationality(Country nationality) {
         this.nationality = nationality;
@@ -116,20 +118,39 @@ public class Player {
         this.team = team;
     }
 
-    public Integer getGoals() {
+    private Integer getGoals() {
         return goals;
     }
 
-    public void setGoals(Integer goals) {
+    private void setGoals(Integer goals) {
         this.goals = goals;
     }
 
-    public Integer getAssists() {
+    private Integer getAssists() {
         return assists;
     }
 
-    public void setAssists() {
+    private void setAssists(Integer assists) {
         this.assists = assists;
     }
+
+    public List<PlayerAward> getPlayerAwards() {
+        return playerAwards;
+    }
+
+    private void setPlayerAwards(List<PlayerAward> playerAwards) {
+        this.playerAwards = playerAwards;
+    }
+
+    //add getters and setters for playerProfile
+    public PlayerProfile getPlayerProfile() {
+        return playerProfile;
+    }
+
+    public void setPlayerProfile(PlayerProfile playerProfile) {
+        this.playerProfile = playerProfile;
+    }
+
+
 }
 

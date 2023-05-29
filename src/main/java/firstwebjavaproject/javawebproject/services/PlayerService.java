@@ -10,4 +10,7 @@ public interface PlayerService {
     List<Player> getAllPlayersByTeam(Long teamId);
     Optional<Player> getPlayer(Long id);
     void deleteById(Long id);
+    List<Player> getPlayersById(List<Integer> playerIds);
+    Player getPlayerById(Long id);
+
 }

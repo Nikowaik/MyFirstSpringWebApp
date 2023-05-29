@@ -50,7 +50,7 @@ public class Match {
         this.league = league;
     }
 
-    public Match(Team homeTeam, Team awayTeam, Integer homeTeamScore, Integer awayTeamScore, LocalDate date, League league) {
+    private Match(Team homeTeam, Team awayTeam, Integer homeTeamScore, Integer awayTeamScore, LocalDate date, League league) {
         this(homeTeam, awayTeam, date, league);
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
@@ -68,7 +68,7 @@ public class Match {
         return homeTeam;
     }
 
-    public void setHomeTeam(Team homeTeam) {
+    private void setHomeTeam(Team homeTeam) {
         this.homeTeam = homeTeam;
     }
 
@@ -76,7 +76,7 @@ public class Match {
         return awayTeam;
     }
 
-    public void setAwayTeam(Team awayTeam) {
+    private void setAwayTeam(Team awayTeam) {
         this.awayTeam = awayTeam;
     }
 
@@ -88,7 +88,7 @@ public class Match {
         return this.league.getId();
     }
 
-    public void setHomeTeamScore(Integer homeTeamScore) {
+    private void setHomeTeamScore(Integer homeTeamScore) {
         this.homeTeamScore = homeTeamScore;
     }
 
@@ -96,7 +96,7 @@ public class Match {
         return awayTeamScore;
     }
 
-    public void setAwayTeamScore(Integer awayTeamScore) {
+    private void setAwayTeamScore(Integer awayTeamScore) {
         this.awayTeamScore = awayTeamScore;
     }
 
@@ -116,7 +116,7 @@ public class Match {
         this.league = league;
     }
 
-    public MatchState getMatchState() {
+    private MatchState getMatchState() {
         return matchState;
     }
 
@@ -124,11 +124,11 @@ public class Match {
         this.matchState = matchState;
     }
 
-    public Long getHomeTeamId(){
+    private Long getHomeTeamId(){
        return this.homeTeam.getId();
     }
 
-    public Long getAwayTeamId(){
+    private Long getAwayTeamId(){
         return this.awayTeam.getId();
     }
 
